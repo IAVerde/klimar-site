@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Klimar — Field Service Redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body {
+    overflow: hidden;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    background: #f4f4f5;
+  }
+  [data-theme="dark"] body, body.dark-shell { background: #09090b; }
+  .stage { width: 100vw; height: 100vh; display: grid; place-items: center; padding: 16px; }
+  .phone-wrap {
+    width: 390px; height: 844px;
+    border-radius: 48px;
+    background: #0a0a0a;
+    padding: 12px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.25), 0 0 0 1px rgba(0,0,0,.1) inset;
+    position: relative;
+  }
+  .phone-screen {
+    width: 100%; height: 100%;
+    border-radius: 38px;
+    overflow: hidden;
+    position: relative;
+    background: var(--surface);
+  }
+  .status-bar {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 100;
+    height: 44px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px;
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px;
+    color: var(--on-surface);
+    pointer-events: none;
+  }
+  .notch {
+    position: absolute; left: 50%; top: 8px; transform: translateX(-50%);
+    width: 120px; height: 30px; background: #0a0a0a; border-radius: 20px; z-index: 200;
+  }
+  .home-indicator {
+    position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%);
+    width: 134px; height: 5px; background: var(--on-surface); opacity: 0.4;
+    border-radius: 3px; z-index: 200; pointer-events: none;
+  }
+  .phone-content {
+    position: absolute; inset: 0;
+    padding-top: 44px;
+    display: flex; flex-direction: column;
+  }
+  .desktop-stage {
+    width: 100%; height: 100%;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .rail {
+    background: var(--surface-container);
+    border-right: 1px solid var(--outline-variant);
+    padding: 24px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .rail-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: transparent; border: 0;
+    color: var(--on-surface-variant);
+    font: inherit; font-weight: 500; font-size: 14px;
+    text-align: left; cursor: pointer;
+  }
+  .rail-item.active { background: var(--brand-container); color: var(--brand-on-container); }
+  .rail-item:not(.active):hover { background: var(--surface-container-high); }
+  .desk-content { overflow: hidden; }
+
+  /* split (light/dark hero) */
+  .split {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 32px; padding: 24px;
+    width: 100vw; height: 100vh;
+    place-items: center;
+    background: linear-gradient(180deg, #fafbfc 0%, #f1f5f9 50%, #1e293b 50%, #0b1220 100%);
+  }
+  .split .phone-wrap { transform: scale(0.92); transform-origin: center; }
+  .split-label {
+    position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+    font: 600 11px/1 'Inter', sans-serif;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .light-side .split-label { color: #475569; }
+  .dark-side .split-label { color: #94a3b8; }
+  .pose { position: relative; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="screens-1.jsx"></script>
+<script type="text/babel" src="screens-2.jsx"></script>
+<script type="text/babel" src="screens-3.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "light",
+  "tenant": "klimar",
+  "viewport": "mobile",
+  "stateDemo": "success",
+  "splitLightDark": false
+}/*EDITMODE-END*/;
+
+const TENANT_NAMES = {
+  klimar: 'Klimar',
+  php: 'PHP Ar Condicionado',
+};
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [route, setRoute] = React.useState({ name: 'dashboard', id: null });
+  const [stack, setStack] = React.useState([]);
+  const [tab, setTab] = React.useState('dashboard');
+  const [sheetOpen, setSheetOpen] = React.useState(false);
+  const [showLogin, setShowLogin] = React.useState(true);
+
+  const tenantName = t.tenant === 'php' ? 'PHP Ar Condicionado' : 'Klimar';
+  const tenantBrand = t.tenant === 'php' ? '#E85D2F' : '#0B5FFF';
+
+  React.useEffect(() => {
+    document.documentElement.dataset.theme = t.theme === 'dark' ? 'dark' : 'light';
+    document.documentElement.dataset.tenant = t.tenant;
+    document.body.classList.toggle('dark-shell', t.theme === 'dark');
+  }, [t.theme, t.tenant]);
+
+  const go = (name, id) => {
+    setStack(s => [...s, route]);
+    setRoute({ name, id });
+  };
+  const back = () => {
+    setStack(s => {
+      if (s.length === 0) return s;
+      setRoute(s[s.length - 1]);
+      return s.slice(0, -1);
+    });
+  };
+
+  const setTab2 = (k) => {
+    setTab(k);
+    setStack([]);
+    if (k === 'dashboard') setRoute({ name: 'dashboard' });
+    else if (k === 'agenda') setRoute({ name: 'agenda' });
+    else if (k === 'clients') setRoute({ name: 'clients' });
+    else if (k === 'budgets') setRoute({ name: 'budgets' });
+    else if (k === 'more') setRoute({ name: 'settings' });
+  };
+
+  const renderScreen = () => {
+    if (showLogin) return <LoginScreen onEnter={() => setShowLogin(false)} tenantName={tenantName} />;
+    const r = route;
+    switch (r.name) {
+      case 'dashboard': return <DashboardScreen go={go} tenantName={tenantName} onFab={() => setSheetOpen(true)} />;
+      case 'agenda': return <AgendaScreen go={go} />;
+      case 'appointment': return <AppointmentDetail id={r.id} go={go} back={back} state={t.stateDemo} setState={(v) => setTweak('stateDemo', v)} />;
+      case 'clients': return <ClientsScreen go={go} state={t.stateDemo} setState={(v) => setTweak('stateDemo', v)} />;
+      case 'client': return <ClientDetail id={r.id} go={go} back={back} />;
+      case 'budgets': return <BudgetsScreen go={go} />;
+      case 'budget': return <BudgetDetail id={r.id} go={go} back={back} />;
+      case 'settings': return <SettingsScreen go={go} tenantName={tenantName} />;
+      case 'organization': return <OrganizationScreen back={back} tenantName={tenantName} tenantBrand={tenantBrand} />;
+      case 'about': return <AboutScreen back={back} />;
+      case 'catalog': return <CatalogScreen />;
+      case 'appointment_form': return <AppointmentForm back={back} kind="appointment" />;
+      case 'budget_form': return <AppointmentForm back={back} kind="budget" />;
+      case 'client_form': return <AppointmentForm back={back} kind="client" />;
+      default: return <DashboardScreen go={go} tenantName={tenantName} onFab={() => setSheetOpen(true)} />;
+    }
+  };
+
+  const showBottomNav = !showLogin && ['dashboard','agenda','clients','budgets','settings','catalog'].includes(route.name);
+
+  const PhoneShell = ({ themeOverride, label, children }) => {
+    const theme = themeOverride || t.theme;
+    return (
+      <div className="pose" style={{ position: 'relative' }}>
+        {label && <div className="split-label">{label}</div>}
+        <div className="phone-wrap" data-theme={theme} style={{
+          background: theme === 'dark' ? '#0a0a0a' : '#1c1c1e'
+        }}>
+          <div className="phone-screen" data-theme={theme} data-tenant={t.tenant}>
+            <div className="status-bar">
+              <span className="mono">9:41</span>
+              <span style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <svg width="18" height="12" viewBox="0 0 18 12"><path fill="currentColor" d="M1 8h2v3H1zM5 6h2v5H5zM9 4h2v7H9zM13 1h2v10h-2z"/></svg>
+                <svg width="16" height="12" viewBox="0 0 16 12"><path fill="currentColor" d="M8 2c2.5 0 4.8 1 6.5 2.5l-1 1c-1.5-1.3-3.4-2-5.5-2s-4 .7-5.5 2l-1-1C3.2 3 5.5 2 8 2zm0 4c1.4 0 2.7.5 3.7 1.4l-1 1A4 4 0 008 7.4 4 4 0 005.3 8.4l-1-1A5.4 5.4 0 018 6zm0 3.5l-1.5 1.5 1.5 1L9.5 11 8 9.5z"/></svg>
+                <svg width="24" height="12" viewBox="0 0 24 12"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="17" height="8" rx="1" fill="currentColor"/><rect x="21" y="4" width="2" height="4" rx="0.5" fill="currentColor"/></svg>
+              </span>
+            </div>
+            <div className="notch" />
+            <div className="phone-content">
+              {children}
+              {!showLogin && (
+                <div className="bottom-nav" style={{ display: showBottomNav ? 'grid' : 'none' }}>
+                  <NavItem k="dashboard" label="Início" icon="home" active={tab === 'dashboard'} onClick={() => setTab2('dashboard')} />
+                  <NavItem k="agenda" label="Agenda" icon="calendar" active={tab === 'agenda'} onClick={() => setTab2('agenda')} />
+                  <NavItem k="clients" label="Clientes" icon="users" active={tab === 'clients'} onClick={() => setTab2('clients')} />
+                  <NavItem k="budgets" label="Orçamentos" icon="receipt" active={tab === 'budgets'} onClick={() => setTab2('budgets')} />
+                  <NavItem k="more" label="Mais" icon="more" active={tab === 'more'} onClick={() => setTab2('more')} />
+                </div>
+              )}
+              <BottomSheet open={sheetOpen} onClose={() => setSheetOpen(false)} title="Criar novo">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <SheetAction icon="calendar" label="Novo atendimento" sub="Agende uma visita" onClick={() => { setSheetOpen(false); go('appointment_form'); }} />
+                  <SheetAction icon="receipt" label="Novo orçamento" sub="Calcule e envie ao cliente" onClick={() => { setSheetOpen(false); go('budget_form'); }} />
+                  <SheetAction icon="users" label="Novo cliente" sub="Cadastrar pessoa ou empresa" onClick={() => { setSheetOpen(false); go('client_form'); }} />
+                </div>
+              </BottomSheet>
+            </div>
+            <div className="home-indicator" />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (t.splitLightDark) {
+    return (
+      <div className="split">
+        <div className="light-side"><PhoneShell themeOverride="light" label="Light">{renderScreen()}</PhoneShell></div>
+        <div className="dark-side"><PhoneShell themeOverride="dark" label="Dark">{renderScreen()}</PhoneShell></div>
+        <ControlsPanel t={t} setTweak={setTweak} route={route} go={go} />
+      </div>
+    );
+  }
+
+  if (t.viewport === 'desktop') {
+    return (
+      <div className="stage">
+        <div style={{ width: 'min(1280px, 100%)', height: 'min(820px, 100%)', borderRadius: 16, overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,.18)', background: 'var(--surface)', border: '1px solid var(--outline-variant)' }} data-theme={t.theme} data-tenant={t.tenant}>
+          <div className="desktop-stage">
+            <DesktopRail tab={tab} setTab2={setTab2} tenantName={tenantName} />
+            <div className="desk-content">{renderScreen()}</div>
+          </div>
+        </div>
+        <ControlsPanel t={t} setTweak={setTweak} route={route} go={go} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="stage">
+      <PhoneShell>{renderScreen()}</PhoneShell>
+      <ControlsPanel t={t} setTweak={setTweak} route={route} go={go} />
+    </div>
+  );
+}
+
+function NavItem({ label, icon, active, onClick }) {
+  return (
+    <button className={`nav-item ${active ? 'active' : ''}`} onClick={onClick}>
+      <Icon name={icon} size={22} strokeWidth={active ? 2.2 : 1.7} />
+      <span>{label}</span>
+    </button>
+  );
+}
+
+function SheetAction({ icon, label, sub, onClick }) {
+  return (
+    <button onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 8px', background: 'transparent', border: 0, borderRadius: 10, textAlign: 'left', cursor: 'pointer', width: '100%' }}>
+      <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--brand-container)', color: 'var(--brand-on-container)', display: 'grid', placeItems: 'center' }}>
+        <Icon name={icon} size={22} strokeWidth={2} />
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontWeight: 600, fontSize: 15 }}>{label}</div>
+        <div className="t-caption text-muted">{sub}</div>
+      </div>
+      <Icon name="chevronRight" size={18} color="var(--on-surface-muted)" />
+    </button>
+  );
+}
+
+function DesktopRail({ tab, setTab2, tenantName }) {
+  return (
+    <div className="rail">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 8px 20px', borderBottom: '1px solid var(--outline-variant)', marginBottom: 12 }}>
+        <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--brand)', color: '#fff', display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 16 }}>k</div>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 14, letterSpacing: '-0.01em' }}>klimar</div>
+          <div className="t-caption text-muted" style={{ fontSize: 11 }}>{tenantName}</div>
+        </div>
+      </div>
+      {[
+        { k: 'dashboard', l: 'Início', i: 'home' },
+        { k: 'agenda', l: 'Agenda', i: 'calendar' },
+        { k: 'clients', l: 'Clientes', i: 'users' },
+        { k: 'budgets', l: 'Orçamentos', i: 'receipt' },
+        { k: 'catalog', l: 'Catálogo', i: 'package' },
+      ].map(item => (
+        <button key={item.k} className={`rail-item ${tab === item.k ? 'active' : ''}`} onClick={() => setTab2(item.k)}>
+          <Icon name={item.i} size={18} strokeWidth={1.8} />
+          {item.l}
+        </button>
+      ))}
+      <div style={{ flex: 1 }} />
+      <button className={`rail-item ${tab === 'more' ? 'active' : ''}`} onClick={() => setTab2('more')}>
+        <Icon name="settings" size={18} strokeWidth={1.8} />Configurações
+      </button>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 8px 0', marginTop: 8, borderTop: '1px solid var(--outline-variant)' }}>
+        <Avatar name="Lucas Andrade" size="sm" />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 13, fontWeight: 600 }} className="truncate">Lucas Andrade</div>
+          <div className="t-caption text-muted truncate" style={{ fontSize: 11 }}>Administrador</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ControlsPanel({ t, setTweak, route, go }) {
+  return (
+    <TweaksPanel title="Klimar — Tweaks">
+      <TweakSection label="Tema" />
+      <TweakRadio label="Modo" value={t.theme} options={['light','dark']} onChange={v => setTweak('theme', v)} />
+      <TweakToggle label="Light + Dark lado a lado" value={t.splitLightDark} onChange={v => setTweak('splitLightDark', v)} />
+
+      <TweakSection label="White-label" />
+      <TweakRadio label="Tenant" value={t.tenant}
+        options={[{ value: 'klimar', label: 'Klimar' }, { value: 'php', label: 'PHP' }]}
+        onChange={v => setTweak('tenant', v)} />
+
+      <TweakSection label="Viewport" />
+      <TweakRadio label="Dispositivo" value={t.viewport} options={['mobile','desktop']} onChange={v => setTweak('viewport', v)} />
+
+      <TweakSection label="Estado das telas" />
+      <TweakRadio label="Estado" value={t.stateDemo}
+        options={[{value:'loading',label:'Loading'},{value:'empty',label:'Empty'},{value:'error',label:'Erro'},{value:'success',label:'OK'}]}
+        onChange={v => setTweak('stateDemo', v)} />
+      <div className="t-caption" style={{ color: 'rgba(41,38,27,.6)', marginTop: 4 }}>
+        Vai para Lista de clientes ou Atendimento para ver os 4 estados.
+      </div>
+      <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+        <TweakButton label="→ Clientes" secondary onClick={() => go('clients')} />
+        <TweakButton label="→ Atendimento" secondary onClick={() => go('appointment', 'os-1042')} />
+      </div>
+
+      <TweakSection label="Navegação" />
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        <TweakButton label="Login" secondary onClick={() => { window.location.reload(); }} />
+        <TweakButton label="Dashboard" secondary onClick={() => go('dashboard')} />
+        <TweakButton label="Agenda" secondary onClick={() => go('agenda')} />
+        <TweakButton label="OS detalhe" secondary onClick={() => go('appointment', 'os-1042')} />
+        <TweakButton label="Cliente" secondary onClick={() => go('client', 'c1')} />
+        <TweakButton label="Orçamentos" secondary onClick={() => go('budgets')} />
+        <TweakButton label="Orçamento" secondary onClick={() => go('budget', 'b-2026-0142')} />
+        <TweakButton label="Form" secondary onClick={() => go('appointment_form')} />
+        <TweakButton label="Catálogo" secondary onClick={() => go('catalog')} />
+        <TweakButton label="Settings" secondary onClick={() => go('settings')} />
+        <TweakButton label="Empresa" secondary onClick={() => go('organization')} />
+        <TweakButton label="Sobre" secondary onClick={() => go('about')} />
+      </div>
+    </TweaksPanel>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

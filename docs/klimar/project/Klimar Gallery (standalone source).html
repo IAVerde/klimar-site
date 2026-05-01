@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Klimar — Todas as Telas</title>
+<template id="__bundler_thumbnail" data-bg-color="#0B5FFF">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0B5FFF"/>
+    <text x="600" y="440" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="220" fill="#ffffff" letter-spacing="-8">klimar</text>
+    <text x="600" y="510" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="500" font-size="32" fill="#ffffff" opacity="0.7" letter-spacing="6">TODAS AS TELAS</text>
+  </svg>
+</template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body { margin: 0; }
+  .gallery-phone {
+    width: 390px; height: 844px;
+    border-radius: 44px;
+    background: #0a0a0a;
+    padding: 10px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.08) inset;
+    position: relative;
+  }
+  .gallery-phone .phone-screen {
+    width: 100%; height: 100%;
+    border-radius: 36px;
+    overflow: hidden;
+    position: relative;
+    background: var(--surface);
+  }
+  .gallery-phone .status-bar {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 100;
+    height: 44px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px;
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px;
+    color: var(--on-surface);
+    pointer-events: none;
+  }
+  .gallery-phone .notch {
+    position: absolute; left: 50%; top: 6px; transform: translateX(-50%);
+    width: 110px; height: 28px; background: #0a0a0a; border-radius: 18px; z-index: 200;
+  }
+  .gallery-phone .home-indicator {
+    position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%);
+    width: 134px; height: 5px; background: var(--on-surface); opacity: 0.4;
+    border-radius: 3px; z-index: 200;
+  }
+  .gallery-phone .phone-content {
+    position: absolute; inset: 0;
+    padding-top: 44px;
+    display: flex; flex-direction: column;
+  }
+  /* desktop frame for the wide screens */
+  .gallery-desktop {
+    width: 1280px; height: 820px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,.18);
+    background: var(--surface);
+    border: 1px solid var(--outline-variant);
+    display: grid;
+    grid-template-columns: 280px 1fr;
+  }
+  .rail {
+    background: var(--surface-container);
+    border-right: 1px solid var(--outline-variant);
+    padding: 24px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .rail-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: transparent; border: 0;
+    color: var(--on-surface-variant);
+    font: inherit; font-weight: 500; font-size: 14px;
+    text-align: left; cursor: pointer;
+  }
+  .rail-item.active { background: var(--brand-container); color: var(--brand-on-container); }
+  .desk-content { overflow: hidden; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="screens-1.jsx"></script>
+<script type="text/babel" src="screens-2.jsx"></script>
+<script type="text/babel" src="screens-3.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const noop = () => {};
+const goNoop = () => {};
+
+// Wrappers to render a single screen inside an iPhone frame (no navigation, no bottom nav).
+function PhoneFrame({ theme = 'light', tenant = 'klimar', children }) {
+  return (
+    <div className="gallery-phone">
+      <div className="phone-screen" data-theme={theme} data-tenant={tenant}>
+        <div className="status-bar">
+          <span className="mono">9:41</span>
+          <span style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <svg width="18" height="12" viewBox="0 0 18 12"><path fill="currentColor" d="M1 8h2v3H1zM5 6h2v5H5zM9 4h2v7H9zM13 1h2v10h-2z"/></svg>
+            <svg width="16" height="12" viewBox="0 0 16 12"><path fill="currentColor" d="M8 2c2.5 0 4.8 1 6.5 2.5l-1 1c-1.5-1.3-3.4-2-5.5-2s-4 .7-5.5 2l-1-1C3.2 3 5.5 2 8 2zm0 4c1.4 0 2.7.5 3.7 1.4l-1 1A4 4 0 008 7.4 4 4 0 005.3 8.4l-1-1A5.4 5.4 0 018 6zm0 3.5l-1.5 1.5 1.5 1L9.5 11 8 9.5z"/></svg>
+            <svg width="24" height="12" viewBox="0 0 24 12"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="17" height="8" rx="1" fill="currentColor"/><rect x="21" y="4" width="2" height="4" rx="0.5" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div className="notch" />
+        <div className="phone-content">{children}</div>
+        <div className="home-indicator" />
+      </div>
+    </div>
+  );
+}
+
+function DesktopFrame({ theme = 'light', tenant = 'klimar', activeTab = 'dashboard', children }) {
+  const items = [
+    { k: 'dashboard', l: 'Início', i: 'home' },
+    { k: 'agenda', l: 'Agenda', i: 'calendar' },
+    { k: 'clients', l: 'Clientes', i: 'users' },
+    { k: 'budgets', l: 'Orçamentos', i: 'receipt' },
+    { k: 'catalog', l: 'Catálogo', i: 'package' },
+  ];
+  return (
+    <div className="gallery-desktop" data-theme={theme} data-tenant={tenant}>
+      <div className="rail">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 8px 20px', borderBottom: '1px solid var(--outline-variant)', marginBottom: 12 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--brand)', color: '#fff', display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 16 }}>k</div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14, letterSpacing: '-0.01em' }}>klimar</div>
+            <div className="t-caption text-muted" style={{ fontSize: 11 }}>{tenant === 'php' ? 'PHP Ar Condicionado' : 'Klimar'}</div>
+          </div>
+        </div>
+        {items.map(it => (
+          <button key={it.k} className={`rail-item ${activeTab === it.k ? 'active' : ''}`}>
+            <Icon name={it.i} size={18} strokeWidth={1.8} />{it.l}
+          </button>
+        ))}
+        <div style={{ flex: 1 }} />
+        <button className="rail-item">
+          <Icon name="settings" size={18} strokeWidth={1.8} />Configurações
+        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 8px 0', marginTop: 8, borderTop: '1px solid var(--outline-variant)' }}>
+          <Avatar name="Lucas Andrade" size="sm" />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 600 }} className="truncate">Lucas Andrade</div>
+            <div className="t-caption text-muted truncate" style={{ fontSize: 11 }}>Administrador</div>
+          </div>
+        </div>
+      </div>
+      <div className="desk-content">{children}</div>
+    </div>
+  );
+}
+
+// Light + Dark side by side comparator
+function Compare({ children, label }) {
+  return (
+    <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+      <div data-theme="light" data-tenant="klimar"><PhoneFrame theme="light">{children}</PhoneFrame></div>
+      <div data-theme="dark"  data-tenant="klimar"><PhoneFrame theme="dark">{children}</PhoneFrame></div>
+    </div>
+  );
+}
+
+// "Empty" props that prevent any nav from doing anything in the gallery.
+const G = { go: noop, back: noop, onFab: noop };
+
+// ───────────────────────────────────────────────────────────────────────────
+// All artboards, organized in sections.
+// ───────────────────────────────────────────────────────────────────────────
+
+const App = () => (
+  <DesignCanvas
+    title="Klimar — Mapa de Telas"
+    subtitle="Todas as telas do protótipo, organizadas por área. Clique numa tela para abrir em tela cheia. Arraste para reordenar. Pan: arraste o fundo. Zoom: scroll."
+    initialZoom={0.42}
+  >
+    {/* ════════════════════════ HERO COMPARISON ═══════════════════════════ */}
+    <DCSection id="hero" title="Light × Dark — visão lado a lado">
+      <DCArtboard id="hero-dashboard" label="Dashboard · Light & Dark" width={812} height={844}>
+        <Compare><DashboardScreen {...G} tenantName="Klimar" /></Compare>
+      </DCArtboard>
+      <DCArtboard id="hero-os" label="Detalhe da OS · Light & Dark" width={812} height={844}>
+        <Compare><AppointmentDetail id="os-1042" {...G} state="success" setState={noop} /></Compare>
+      </DCArtboard>
+    </DCSection>
+
+    {/* ════════════════════════ AUTH ══════════════════════════════════════ */}
+    <DCSection id="auth" title="Acesso">
+      <DCArtboard id="login-light" label="Login · Klimar" width={390} height={844}>
+        <PhoneFrame theme="light"><LoginScreen onEnter={noop} tenantName="Klimar" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="login-dark" label="Login · Dark" width={390} height={844}>
+        <PhoneFrame theme="dark"><LoginScreen onEnter={noop} tenantName="Klimar" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="login-php" label="Login · Tenant PHP" width={390} height={844}>
+        <PhoneFrame theme="light" tenant="php"><LoginScreen onEnter={noop} tenantName="PHP Ar Condicionado" /></PhoneFrame>
+      </DCArtboard>
+    </DCSection>
+
+    {/* ════════════════════════ DASHBOARD ═════════════════════════════════ */}
+    <DCSection id="dashboard" title="Dashboard">
+      <DCArtboard id="dash-mobile-light" label="Dashboard · Mobile" width={390} height={844}>
+        <PhoneFrame theme="light"><DashboardScreen {...G} tenantName="Klimar" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="dash-mobile-dark" label="Dashboard · Mobile · Dark" width={390} height={844}>
+        <PhoneFrame theme="dark"><DashboardScreen {...G} tenantName="Klimar" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="dash-mobile-php" label="Dashboard · Tenant PHP" width={390} height={844}>
+        <PhoneFrame theme="light" tenant="php"><DashboardScreen {...G} tenantName="PHP Ar Condicionado" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="dash-desktop-light" label="Dashboard · Desktop" width={1280} height={820}>
+        <DesktopFrame theme="light" activeTab="dashboard"><DashboardScreen {...G} tenantName="Klimar" /></DesktopFrame>
+      </DCArtboard>
+      <DCArtboard id="dash-desktop-dark" label="Dashboard · Desktop · Dark" width={1280} height={820}>
+        <DesktopFrame theme="dark" activeTab="dashboard"><DashboardScreen {...G} tenantName="Klimar" /></DesktopFrame>
+      </DCArtboard>
+    </DCSection>
+
+    {/* ════════════════════════ AGENDA ════════════════════════════════════ */}
+    <DCSection id="agenda" title="Agenda">
+      <DCArtboard id="agenda-mobile-light" label="Agenda · Mobile" width={390} height={844}>
+        <PhoneFrame theme="light"><AgendaScreen {...G} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="agenda-mobile-dark" label="Agenda · Dark" width={390} height={844}>
+        <PhoneFrame theme="dark"><AgendaScreen {...G} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="agenda-desktop" label="Agenda · Desktop (vista semana)" width={1280} height={820}>
+        <DesktopFrame theme="light" activeTab="agenda"><AgendaScreen {...G} /></DesktopFrame>
+      </DCArtboard>
+    </DCSection>
+
+    {/* ════════════════════════ APPOINTMENT — 4 STATES ═══════════════════ */}
+    <DCSection id="appointment" title="Detalhe do Atendimento — 4 estados">
+      <DCArtboard id="apt-success" label="OS · Sucesso (estado completo)" width={390} height={844}>
+        <PhoneFrame theme="light"><AppointmentDetail id="os-1042" {...G} state="success" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="apt-loading" label="OS · Loading (skeleton)" width={390} height={844}>
+        <PhoneFrame theme="light"><AppointmentDetail id="os-1042" {...G} state="loading" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="apt-empty" label="OS · Empty" width={390} height={844}>
+        <PhoneFrame theme="light"><AppointmentDetail id="os-1042" {...G} state="empty" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="apt-error" label="OS · Erro" width={390} height={844}>
+        <PhoneFrame theme="light"><AppointmentDetail id="os-1042" {...G} state="error" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="apt-success-dark" label="OS · Dark (estado completo)" width={390} height={844}>
+        <PhoneFrame theme="dark"><AppointmentDetail id="os-1042" {...G} state="success" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+    </DCSection>
+
+    {/* ════════════════════════ CLIENTS — 4 STATES ════════════════════════ */}
+    <DCSection id="clients" title="Clientes — Lista (4 estados) + Detalhe">
+      <DCArtboard id="cli-success" label="Clientes · Sucesso" width={390} height={844}>
+        <PhoneFrame theme="light"><ClientsScreen {...G} state="success" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="cli-loading" label="Clientes · Loading" width={390} height={844}>
+        <PhoneFrame theme="light"><ClientsScreen {...G} state="loading" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="cli-empty" label="Clientes · Empty (primeiro acesso)" width={390} height={844}>
+        <PhoneFrame theme="light"><ClientsScreen {...G} state="empty" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="cli-error" label="Clientes · Erro" width={390} height={844}>
+        <PhoneFrame theme="light"><ClientsScreen {...G} state="error" setState={noop} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="cli-detail" label="Cliente · Detalhe (3 abas)" width={390} height={844}>
+        <PhoneFrame theme="light"><ClientDetail id="c1" {...G} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="cli-detail-dark" label="Cliente · Detalhe · Dark" width={390} height={844}>
+        <PhoneFrame theme="dark"><ClientDetail id="c1" {...G} /></PhoneFrame>
+      </DCArtboard>
+    </DCSection>
+
+    {/* ════════════════════════ BUDGETS ═══════════════════════════════════ */}
+    <DCSection id="budgets" title="Orçamentos">
+      <DCArtboard id="bud-list" label="Orçamentos · Lista" width={390} height={844}>
+        <PhoneFrame theme="light"><BudgetsScreen {...G} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="bud-list-dark" label="Orçamentos · Lista · Dark" width={390} height={844}>
+        <PhoneFrame theme="dark"><BudgetsScreen {...G} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="bud-detail" label="Orçamento · Detalhe + ações" width={390} height={844}>
+        <PhoneFrame theme="light"><BudgetDetail id="b-2026-0142" {...G} /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="bud-detail-php" label="Orçamento · Tenant PHP" width={390} height={844}>
+        <PhoneFrame theme="light" tenant="php"><BudgetDetail id="b-2026-0142" {...G} /></PhoneFrame>
+      </DCArtboard>
+    </DCSection>
+
+    {/* ════════════════════════ FORMS — 3 STEPS ═══════════════════════════ */}
+    <DCSection id="forms" title="Formulários — Stepper de 3 etapas">
+      <DCArtboard id="form-step1" label="Novo atendimento · Etapa 1 (Cliente)" width={390} height={844}>
+        <PhoneFrame theme="light"><AppointmentForm back={noop} kind="appointment" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="form-budget" label="Novo orçamento" width={390} height={844}>
+        <PhoneFrame theme="light"><AppointmentForm back={noop} kind="budget" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="form-client" label="Novo cliente" width={390} height={844}>
+        <PhoneFrame theme="light"><AppointmentForm back={noop} kind="client" /></PhoneFrame>
+      </DCArtboard>
+    </DCSection>
+
+    {/* ════════════════════════ CATALOG / SETTINGS / ORG / ABOUT ══════════ */}
+    <DCSection id="admin" title="Catálogo, Configurações, Empresa, Sobre">
+      <DCArtboard id="catalog" label="Catálogo de serviços" width={390} height={844}>
+        <PhoneFrame theme="light"><CatalogScreen /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="settings" label="Configurações" width={390} height={844}>
+        <PhoneFrame theme="light"><SettingsScreen {...G} tenantName="Klimar" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="org-klimar" label="Empresa (white-label)" width={390} height={844}>
+        <PhoneFrame theme="light"><OrganizationScreen back={noop} tenantName="Klimar" tenantBrand="#0B5FFF" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="org-php" label="Empresa · Tenant PHP" width={390} height={844}>
+        <PhoneFrame theme="light" tenant="php"><OrganizationScreen back={noop} tenantName="PHP Ar Condicionado" tenantBrand="#E85D2F" /></PhoneFrame>
+      </DCArtboard>
+      <DCArtboard id="about" label="Sobre" width={390} height={844}>
+        <PhoneFrame theme="light"><AboutScreen back={noop} /></PhoneFrame>
+      </DCArtboard>
+    </DCSection>
+  </DesignCanvas>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

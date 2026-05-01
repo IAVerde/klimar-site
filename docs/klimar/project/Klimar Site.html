@@ -1,0 +1,1600 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Klimar — Gestão para serviços técnicos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        cyan: { brand: '#00B8D4', light: '#4DD0E1', dark: '#006C7F', 50: '#E0F7FA' },
+        slate: {
+          950: '#020617', 900: '#0F172A', 800: '#1E293B', 700: '#334155',
+          600: '#475569', 500: '#64748B', 400: '#94A3B8', 300: '#CBD5E1',
+          200: '#E2E8F0', 100: '#F1F5F9', 50: '#F8FAFC',
+        },
+      },
+      letterSpacing: {
+        tightest: '-0.045em',
+        tighter2: '-0.04em',
+        tighter3: '-0.03em',
+      },
+    },
+  },
+};
+</script>
+<style>
+:root {
+  --klimar-cyan: #00B8D4;
+  --klimar-cyan-light: #4DD0E1;
+  --klimar-cyan-dark: #006C7F;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0F172A;
+  color: #F1F5F9;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.font-display { font-family: 'Space Grotesk', system-ui, sans-serif; }
+.font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* === Eyebrow === */
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #94A3B8;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.eyebrow .dot { color: var(--klimar-cyan); }
+.eyebrow.cyan { color: var(--klimar-cyan); }
+
+/* === Italic cyan tic === */
+.tic {
+  font-style: italic;
+  color: var(--klimar-cyan);
+  font-weight: 500;
+}
+
+/* === Display headings === */
+.h-display {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.h-section {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+/* === CTAs === */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: var(--klimar-cyan);
+  color: #021018;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 0 32px rgba(0, 184, 212, 0.25), 0 1px 0 rgba(255,255,255,0.2) inset;
+  transition: transform 200ms cubic-bezier(0.4,0,0.2,1), box-shadow 200ms cubic-bezier(0.4,0,0.2,1), background 200ms;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 60px rgba(0, 184, 212, 0.45), 0 1px 0 rgba(255,255,255,0.25) inset;
+  background: #1ac4de;
+}
+.btn-primary.lg { padding: 18px 32px; font-size: 17px; box-shadow: 0 0 56px rgba(0,184,212,0.32), 0 1px 0 rgba(255,255,255,0.2) inset; }
+.btn-primary.lg:hover { box-shadow: 0 0 96px rgba(0,184,212,0.55), 0 1px 0 rgba(255,255,255,0.25) inset; }
+.btn-primary.xl { padding: 22px 40px; font-size: 18px; box-shadow: 0 0 80px rgba(0,184,212,0.38), 0 1px 0 rgba(255,255,255,0.2) inset; }
+.btn-primary.xl:hover { box-shadow: 0 0 120px rgba(0,184,212,0.6), 0 1px 0 rgba(255,255,255,0.25) inset; }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: transparent;
+  color: #F1F5F9;
+  font-weight: 500;
+  font-size: 15px;
+  border: 1px solid #334155;
+  transition: all 200ms;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-ghost:hover { border-color: #475569; background: rgba(255,255,255,0.03); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: #1E293B;
+  color: #F1F5F9;
+  font-weight: 500;
+  font-size: 15px;
+  border: 1px solid #334155;
+  transition: all 200ms;
+  cursor: pointer;
+}
+.btn-secondary:hover { border-color: var(--klimar-cyan); }
+
+/* === Cards === */
+.card {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  transition: transform 200ms cubic-bezier(0.4,0,0.2,1), border-color 200ms, box-shadow 200ms;
+}
+.card.hover-lift:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0,184,212,0.4);
+  box-shadow: 0 20px 40px -20px rgba(0,184,212,0.15);
+}
+
+/* === Nav backdrop blur === */
+.nav-blur {
+  background: rgba(15,23,42,0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(51,65,85,0.5);
+}
+
+/* === Hero background orbs === */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.orb-1 { width: 480px; height: 480px; background: #00B8D4; top: -120px; right: -80px; opacity: 0.18; }
+.orb-2 { width: 360px; height: 360px; background: #006C7F; bottom: -100px; left: 10%; opacity: 0.22; }
+.orb-3 { width: 280px; height: 280px; background: #4DD0E1; top: 35%; left: 45%; opacity: 0.10; filter: blur(100px); }
+
+/* === Grid pattern === */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 80%);
+}
+
+/* === Phone mockup float === */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float { animation: float 6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .float { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* Phone frame */
+.phone-frame {
+  width: 312px;
+  height: 640px;
+  background: #050a14;
+  border-radius: 44px;
+  padding: 10px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06) inset,
+    0 0 80px rgba(0,184,212,0.25),
+    0 40px 80px rgba(0,0,0,0.5);
+  position: relative;
+}
+.phone-screen {
+  width: 100%; height: 100%;
+  border-radius: 36px;
+  background: #0B1220;
+  overflow: hidden;
+  position: relative;
+}
+.phone-notch {
+  position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+  width: 96px; height: 26px; background: #050a14; border-radius: 16px; z-index: 5;
+}
+
+/* === Audience toggle === */
+.seg {
+  display: inline-flex;
+  background: #0F172A;
+  border: 1px solid #334155;
+  border-radius: 999px;
+  padding: 4px;
+  position: relative;
+}
+.seg button {
+  position: relative;
+  z-index: 1;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #94A3B8;
+  border-radius: 999px;
+  transition: color 220ms;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+}
+.seg button.active { color: #021018; }
+.seg .seg-pill {
+  position: absolute;
+  top: 4px; bottom: 4px;
+  background: var(--klimar-cyan);
+  border-radius: 999px;
+  z-index: 0;
+  transition: left 240ms cubic-bezier(0.4,0,0.2,1), width 240ms cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 0 24px rgba(0,184,212,0.4);
+}
+
+/* === Big KPI number === */
+.kpi-num {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(56px, 8vw, 96px);
+  letter-spacing: -0.045em;
+  line-height: 1;
+  color: var(--klimar-cyan);
+  text-wrap: nowrap;
+}
+
+/* FAQ */
+.faq-item { border-bottom: 1px solid #334155; }
+.faq-trigger {
+  width: 100%; text-align: left;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+  padding: 24px 0;
+  background: transparent; border: 0;
+  color: #F1F5F9;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+}
+.faq-chev { transition: transform 220ms; color: #94A3B8; flex-shrink: 0; }
+.faq-item.open .faq-chev { transform: rotate(180deg); color: var(--klimar-cyan); }
+.faq-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 300ms ease;
+  color: #94A3B8;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.faq-item.open .faq-body { max-height: 500px; padding: 0 0 24px; }
+
+/* Comparison checkmark + x */
+.tick-cyan { color: var(--klimar-cyan); }
+.tick-mute { color: #475569; }
+.tick-warn { color: #F59E0B; }
+
+/* Pricing card highlight */
+.pricing-popular {
+  border-color: rgba(0,184,212,0.45);
+  background: linear-gradient(180deg, rgba(0,184,212,0.06) 0%, #1E293B 60%);
+  box-shadow: 0 0 0 1px rgba(0,184,212,0.2), 0 30px 60px -30px rgba(0,184,212,0.4);
+  position: relative;
+}
+.popular-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--klimar-cyan);
+  color: #021018;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+  padding: 6px 14px; border-radius: 999px;
+  box-shadow: 0 0 24px rgba(0,184,212,0.5);
+}
+
+/* Pricing comparison table */
+.pricing-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.pricing-table th, .pricing-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #334155;
+  vertical-align: middle;
+}
+.pricing-table thead th {
+  position: sticky; top: 72px;
+  background: #0F172A;
+  z-index: 5;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #94A3B8;
+  font-weight: 600;
+  border-bottom: 1px solid #334155;
+}
+.pricing-table tbody td.col-klimar { background: rgba(0,184,212,0.04); }
+.pricing-table tbody th.col-klimar { background: rgba(0,184,212,0.06); }
+.pricing-table tr.cat-row td {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--klimar-cyan);
+  background: #0F172A;
+  padding-top: 28px;
+  padding-bottom: 10px;
+  font-weight: 600;
+  border-bottom: 1px solid #334155;
+}
+
+/* Light section variant for /sobre manifesto */
+.light-section {
+  background: #F8FAFC;
+  color: #0F172A;
+}
+.light-section .eyebrow { color: #475569; }
+.light-section .h-section { color: #0F172A; }
+
+/* Glow chip (logo K) */
+.k-mark {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #00B8D4 0%, #006C7F 100%);
+  display: grid; place-items: center;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 22px;
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(0,184,212,0.45), 0 0 0 1px rgba(255,255,255,0.1) inset;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  padding-bottom: 2px;
+}
+
+/* Roadmap column accent */
+.road-now    { --rc: #16A34A; }
+.road-soon   { --rc: var(--klimar-cyan); }
+.road-future { --rc: #94A3B8; }
+.road-col h4 .dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 999px;
+  background: var(--rc); margin-right: 10px; vertical-align: middle;
+  box-shadow: 0 0 12px var(--rc);
+}
+
+/* hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+/* page transitions */
+.page { display: none; }
+.page.active { display: block; }
+
+/* Mobile menu */
+.mobile-menu {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(2,6,23,0.95);
+  backdrop-filter: blur(20px);
+  display: flex; flex-direction: column;
+  padding: 24px;
+  transform: translateY(-100%);
+  transition: transform 280ms cubic-bezier(0.4,0,0.2,1);
+}
+.mobile-menu.open { transform: translateY(0); }
+
+/* === Toggle billing === */
+.billing-toggle {
+  display: inline-flex; align-items: center; gap: 16px;
+  background: #0F172A;
+  border: 1px solid #334155;
+  border-radius: 999px;
+  padding: 6px;
+}
+.billing-toggle button {
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 14px; font-weight: 500;
+  color: #94A3B8;
+  border: 0; background: transparent; cursor: pointer;
+  transition: color 200ms, background 200ms;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.billing-toggle button.active {
+  background: var(--klimar-cyan);
+  color: #021018;
+  box-shadow: 0 0 24px rgba(0,184,212,0.35);
+}
+.savings-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.12em;
+  background: rgba(0,184,212,0.18); color: var(--klimar-cyan);
+  padding: 3px 7px; border-radius: 999px; font-weight: 700;
+}
+
+/* Section padding standard */
+.section-pad { padding: clamp(80px, 10vw, 128px) 0; }
+</style>
+</head>
+<body>
+
+<!-- ==================================================================== -->
+<!-- NAV -->
+<!-- ==================================================================== -->
+<nav class="nav-blur fixed top-0 inset-x-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 h-[72px] flex items-center justify-between">
+    <a href="#/" data-route="/" class="flex items-center gap-2.5 group">
+      <div class="k-mark">k</div>
+      <div class="font-display font-bold text-[18px] tracking-tighter2 leading-none flex items-baseline gap-1">
+        klimar<span class="font-mono text-[10px] text-slate-500 align-super">™</span>
+      </div>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-[14.5px] text-slate-300">
+      <a href="#/#features" class="hover:text-white transition-colors">Recursos</a>
+      <a href="#/precos" data-route="/precos" class="hover:text-white transition-colors">Preços</a>
+      <a href="#/sobre" data-route="/sobre" class="hover:text-white transition-colors">Sobre</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <button class="hidden sm:inline-flex btn-ghost" style="padding: 10px 18px; font-size: 14px;">Entrar</button>
+      <button class="btn-primary" style="padding: 10px 18px; font-size: 14px;">
+        Começar grátis
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+      <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-200">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mobile-menu" class="mobile-menu md:hidden">
+  <div class="flex items-center justify-between mb-12">
+    <div class="flex items-center gap-2.5">
+      <div class="k-mark">k</div>
+      <div class="font-display font-bold text-[18px] tracking-tighter2">klimar</div>
+    </div>
+    <button id="mobile-menu-close" class="p-2"><i data-lucide="x" class="w-6 h-6"></i></button>
+  </div>
+  <div class="flex flex-col gap-1 text-2xl font-display font-semibold tracking-tighter3">
+    <a href="#/#features" class="py-4 border-b border-slate-800">Recursos</a>
+    <a href="#/precos" data-route="/precos" class="py-4 border-b border-slate-800">Preços</a>
+    <a href="#/sobre" data-route="/sobre" class="py-4 border-b border-slate-800">Sobre</a>
+  </div>
+  <div class="mt-auto flex flex-col gap-3">
+    <button class="btn-ghost justify-center">Entrar</button>
+    <button class="btn-primary justify-center">Começar grátis <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<!-- PAGE: HOME (#/) -->
+<!-- ==================================================================== -->
+<main id="page-home" class="page active" data-screen-label="Home">
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden pt-[72px]">
+    <div class="grid-pattern absolute inset-0"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-8 pt-20 lg:pt-28 pb-24 lg:pb-32 grid lg:grid-cols-12 gap-12 items-center min-h-[calc(90vh-72px)]">
+      <div class="lg:col-span-7 relative z-10">
+        <div class="eyebrow mb-7">
+          <span>klimar™</span><span class="dot">·</span><span>gestão para serviços técnicos</span>
+        </div>
+        <h1 class="h-display text-[clamp(44px,7vw,92px)] mb-7">
+          A <span class="tic">agenda</span> do seu técnico,<br class="hidden sm:inline">
+          resolvida.
+        </h1>
+        <p class="text-[18px] lg:text-[19px] text-slate-300 max-w-[560px] mb-10 leading-[1.55]">
+          OS digital, fotos antes/depois, assinatura no app, PDF de orçamento direto pro WhatsApp. Para autônomos, MEIs e empresas de ar-condicionado, elétrica e manutenção predial.
+        </p>
+        <div class="flex flex-wrap items-center gap-3 mb-8">
+          <button class="btn-primary lg">Começar grátis <i data-lucide="arrow-right" class="w-[18px] h-[18px]"></i></button>
+          <a href="#/precos" data-route="/precos" class="btn-ghost" style="padding: 16px 26px;">Ver planos</a>
+        </div>
+        <div class="font-mono text-[11px] tracking-[0.16em] uppercase text-slate-500 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span>grátis para sempre</span><span class="text-slate-700">·</span>
+          <span>sem cartão</span><span class="text-slate-700">·</span>
+          <span>lgpd compliant</span>
+        </div>
+      </div>
+
+      <!-- Phone mockup -->
+      <div class="lg:col-span-5 flex justify-center lg:justify-end relative">
+        <div class="absolute inset-0 -m-20 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 60% 50%, rgba(0,184,212,0.25), transparent 70%);"></div>
+        <div class="phone-frame float relative z-10">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="absolute inset-0 px-5 pt-12 pb-3 flex flex-col">
+              <!-- header -->
+              <div class="flex items-center justify-between mb-4">
+                <button class="w-9 h-9 rounded-full bg-slate-800 grid place-items-center"><i data-lucide="chevron-left" class="w-4 h-4 text-slate-300"></i></button>
+                <div class="font-mono text-[10px] tracking-[0.14em] uppercase text-slate-500">os&nbsp;#1042</div>
+                <button class="w-9 h-9 rounded-full bg-slate-800 grid place-items-center"><i data-lucide="more-horizontal" class="w-4 h-4 text-slate-300"></i></button>
+              </div>
+              <!-- status -->
+              <div class="inline-flex self-start items-center gap-1.5 px-2.5 py-1 rounded-md mb-4" style="background: rgba(245,158,11,0.15); color: #F59E0B;">
+                <span class="w-1.5 h-1.5 rounded-full" style="background:#F59E0B;"></span>
+                <span class="font-mono text-[10px] tracking-[0.14em] uppercase font-semibold">em andamento</span>
+              </div>
+              <!-- title -->
+              <div class="font-display font-bold text-[22px] tracking-tighter2 text-slate-50 leading-tight mb-1">Manutenção preventiva</div>
+              <div class="text-[13px] text-slate-400 mb-4">Construtora Verdes Ltda</div>
+              <!-- meta -->
+              <div class="flex items-center gap-2 text-[11px] text-slate-400 mb-4 leading-snug">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 flex-shrink-0"></i>
+                <span class="truncate">Av. Paulista, 1.500 — São Paulo</span>
+              </div>
+              <div class="font-mono text-[10px] tracking-[0.14em] uppercase text-slate-500 mb-4">3 splits · 2h est · zona sul</div>
+
+              <!-- progress -->
+              <div class="rounded-xl border border-slate-800 bg-slate-900/60 p-4 mb-3">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="text-[12px] text-slate-300 font-medium">Checklist</div>
+                  <div class="font-mono text-[11px] text-cyan-brand">4/12</div>
+                </div>
+                <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div class="h-full rounded-full" style="width: 33%; background: linear-gradient(90deg, #00B8D4, #4DD0E1); box-shadow: 0 0 10px rgba(0,184,212,0.5);"></div>
+                </div>
+              </div>
+
+              <!-- client card -->
+              <div class="rounded-xl border border-slate-800 bg-slate-900/60 p-3 mb-3 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full" style="background: linear-gradient(135deg,#4DD0E1,#006C7F);"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[12.5px] font-semibold text-slate-100 truncate">Marcos Almeida</div>
+                  <div class="text-[10.5px] text-slate-500 truncate">Síndico · (11) 9 8132-4488</div>
+                </div>
+                <button class="w-8 h-8 rounded-full bg-slate-800 grid place-items-center"><i data-lucide="phone" class="w-3.5 h-3.5 text-slate-300"></i></button>
+              </div>
+
+              <!-- mini photo strip -->
+              <div class="grid grid-cols-3 gap-2 mb-3">
+                <div class="aspect-square rounded-md" style="background: linear-gradient(135deg,#1E293B,#334155);"></div>
+                <div class="aspect-square rounded-md" style="background: linear-gradient(135deg,#0F172A,#1E293B);"></div>
+                <div class="aspect-square rounded-md grid place-items-center bg-slate-800/60 border border-dashed border-slate-700"><i data-lucide="plus" class="w-4 h-4 text-slate-500"></i></div>
+              </div>
+
+              <div class="mt-auto">
+                <button class="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl text-[13px] font-semibold" style="background: var(--klimar-cyan); color: #021018; box-shadow: 0 0 30px rgba(0,184,212,0.45);">
+                  Finalizar atendimento <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE TOGGLE -->
+  <section class="relative pt-2 pb-16 lg:pb-20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center gap-4">
+      <div class="eyebrow"><span>quem usa klimar</span></div>
+      <div class="seg" id="audience-toggle">
+        <span class="seg-pill"></span>
+        <button data-aud="solo" class="active">Autônomo / MEI</button>
+        <button data-aud="company">Empresa estabelecida</button>
+      </div>
+      <p id="aud-caption" class="font-mono text-[11px] tracking-[0.16em] uppercase text-slate-500 text-center max-w-2xl">
+        ajusta destaques de recursos e plano recomendado abaixo
+      </p>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section-pad relative">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <div class="eyebrow justify-center inline-flex"><span>por que klimar</span></div>
+        <h2 class="h-section text-[clamp(32px,4vw,52px)] mt-5 max-w-3xl mx-auto">
+          Resultado em números, não em <span class="tic">promessas.</span>
+        </h2>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-12 lg:gap-y-0 lg:divide-x divide-slate-800">
+        <div class="text-center px-6">
+          <div class="kpi-num">+4h</div>
+          <p class="text-slate-400 text-[14px] mt-3 max-w-[180px] mx-auto leading-snug">economizadas por técnico/semana</p>
+        </div>
+        <div class="text-center px-6">
+          <div class="kpi-num">R$&nbsp;0</div>
+          <p class="text-slate-400 text-[14px] mt-3 max-w-[180px] mx-auto leading-snug">pra começar — Free pra sempre</p>
+        </div>
+        <div class="text-center px-6">
+          <div class="kpi-num">3</div>
+          <p class="text-slate-400 text-[14px] mt-3 max-w-[180px] mx-auto leading-snug">cliques do orçamento ao WhatsApp</p>
+        </div>
+        <div class="text-center px-6">
+          <div class="kpi-num">100%</div>
+          <p class="text-slate-400 text-[14px] mt-3 max-w-[180px] mx-auto leading-snug">LGPD compliant via iubenda</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE BENTO -->
+  <section id="features" class="section-pad relative">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="max-w-3xl mb-14">
+        <div class="eyebrow"><span>recursos que viram contrato</span></div>
+        <h2 class="h-section text-[clamp(32px,4vw,56px)] mt-5">
+          Tudo o que sua empresa precisa, <span class="tic">na palma da mão.</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-6 gap-5 auto-rows-[minmax(220px,auto)]">
+        <!-- Card 1 — Photos before/after (large) -->
+        <div class="card hover-lift md:col-span-4 md:row-span-2 p-7 lg:p-9 flex flex-col">
+          <div class="eyebrow cyan mb-3"><span>fotos antes/depois</span></div>
+          <h3 class="font-display font-semibold text-[26px] tracking-tighter2 mb-3 leading-tight">A prova do serviço, em duas imagens.</h3>
+          <p class="text-slate-400 text-[15px] max-w-md mb-6">Antes e depois de cada serviço, anexados à OS. Vai pro PDF, vai pro cliente, fica no histórico do equipamento.</p>
+          <!-- visual -->
+          <div class="flex-1 mt-auto grid grid-cols-2 gap-3 max-w-md">
+            <div class="relative rounded-lg overflow-hidden aspect-[4/3]" style="background: linear-gradient(135deg,#1E293B 0%,#334155 100%);">
+              <div class="absolute inset-0 grid grid-rows-3 gap-1 p-3 opacity-30">
+                <div class="bg-slate-700 rounded-sm"></div>
+                <div class="bg-slate-700 rounded-sm"></div>
+                <div class="bg-slate-700 rounded-sm"></div>
+              </div>
+              <span class="absolute top-2 left-2 font-mono text-[9px] tracking-[0.14em] uppercase text-slate-300 bg-black/40 px-1.5 py-0.5 rounded">antes</span>
+            </div>
+            <div class="relative rounded-lg overflow-hidden aspect-[4/3]" style="background: linear-gradient(135deg,rgba(0,184,212,0.18),rgba(77,208,225,0.05));">
+              <div class="absolute inset-0 grid grid-rows-3 gap-1 p-3 opacity-30">
+                <div class="rounded-sm" style="background:rgba(0,184,212,0.4);"></div>
+                <div class="rounded-sm" style="background:rgba(0,184,212,0.4);"></div>
+                <div class="rounded-sm" style="background:rgba(0,184,212,0.4);"></div>
+              </div>
+              <span class="absolute top-2 left-2 font-mono text-[9px] tracking-[0.14em] uppercase text-cyan-brand bg-black/40 px-1.5 py-0.5 rounded">depois</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 — Signature -->
+        <div class="card hover-lift md:col-span-2 p-7 flex flex-col">
+          <div class="eyebrow cyan mb-3"><span>assinatura digital</span></div>
+          <h3 class="font-display font-semibold text-[20px] tracking-tighter2 mb-2 leading-tight">Cliente assina na tela.</h3>
+          <p class="text-slate-400 text-[14px] mb-5">Comprovação legal, sem papel, sem caneta.</p>
+          <div class="mt-auto rounded-lg p-4 border border-slate-800 bg-slate-900/60">
+            <svg viewBox="0 0 200 50" class="w-full h-12">
+              <path d="M5 38 Q 18 12, 32 30 T 62 26 Q 76 8, 92 36 T 130 22 Q 146 4, 162 32 T 195 28" stroke="#00B8D4" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="font-mono text-[9px] tracking-[0.16em] uppercase text-slate-500 mt-2">marcos almeida · 14:32</div>
+          </div>
+        </div>
+
+        <!-- Card 3 — QR -->
+        <div class="card hover-lift md:col-span-2 p-7 flex flex-col">
+          <div class="eyebrow cyan mb-3"><span>qr code de equipamento</span></div>
+          <h3 class="font-display font-semibold text-[20px] tracking-tighter2 mb-2 leading-tight">Cole no aparelho. Histórico inteiro.</h3>
+          <p class="text-slate-400 text-[14px] mb-4">Escaneou, viu manutenções, peças, técnico responsável.</p>
+          <div class="mt-auto self-end">
+            <!-- mini QR placeholder -->
+            <div class="w-16 h-16 rounded-md p-1.5 bg-white">
+              <div class="w-full h-full grid grid-cols-6 grid-rows-6 gap-px">
+                <div class="col-span-2 row-span-2 bg-slate-900 rounded-sm"></div>
+                <div class="bg-slate-900"></div><div></div><div class="bg-slate-900"></div><div class="bg-slate-900"></div>
+                <div class="bg-slate-900"></div><div></div><div class="bg-slate-900"></div><div class="bg-slate-900"></div>
+                <div class="col-start-5 col-span-2 row-span-2 bg-slate-900 rounded-sm"></div>
+                <div></div><div class="bg-slate-900"></div><div></div><div class="bg-slate-900"></div>
+                <div class="bg-slate-900"></div><div></div><div class="bg-slate-900"></div><div></div><div class="bg-slate-900"></div><div class="bg-slate-900"></div>
+                <div></div><div class="bg-slate-900"></div><div class="bg-slate-900"></div><div></div><div class="bg-slate-900"></div><div></div>
+                <div class="row-start-5 col-span-2 row-span-2 bg-slate-900 rounded-sm"></div>
+                <div class="bg-slate-900"></div><div></div><div class="bg-slate-900"></div><div class="bg-slate-900"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 — Dashboard KPIs (wide) -->
+        <div class="card hover-lift md:col-span-4 p-7 lg:p-8 flex flex-col">
+          <div class="flex items-start justify-between gap-6 flex-wrap">
+            <div>
+              <div class="eyebrow cyan mb-3"><span>dashboard kpis</span></div>
+              <h3 class="font-display font-semibold text-[22px] tracking-tighter2 mb-2 leading-tight">Receita, OS abertas, conclusão. Em tempo real.</h3>
+              <p class="text-slate-400 text-[14px] max-w-sm">A foto do mês na primeira tela depois do login.</p>
+            </div>
+            <!-- mini sparkline + stats -->
+            <div class="flex items-end gap-6 flex-shrink-0">
+              <div>
+                <div class="font-mono text-[10px] tracking-[0.14em] uppercase text-slate-500">receita · maio</div>
+                <div class="font-display font-bold text-[26px] tracking-tighter2 text-slate-100 leading-none mt-1">R$&nbsp;48.320</div>
+                <div class="text-[12px] text-emerald-400 mt-1.5 flex items-center gap-1"><i data-lucide="trending-up" class="w-3.5 h-3.5"></i> +18%</div>
+              </div>
+              <svg viewBox="0 0 140 56" class="w-[140px] h-14">
+                <defs><linearGradient id="sparkfill" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#00B8D4" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#00B8D4" stop-opacity="0"/>
+                </linearGradient></defs>
+                <path d="M0 42 L18 38 L36 30 L54 34 L72 22 L90 26 L108 14 L126 18 L140 8 L140 56 L0 56 Z" fill="url(#sparkfill)"/>
+                <path d="M0 42 L18 38 L36 30 L54 34 L72 22 L90 26 L108 14 L126 18 L140 8" stroke="#00B8D4" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 — Checklist -->
+        <div class="card hover-lift md:col-span-2 p-7 flex flex-col">
+          <div class="eyebrow cyan mb-3"><span>checklist por serviço</span></div>
+          <h3 class="font-display font-semibold text-[20px] tracking-tighter2 mb-2 leading-tight">Padroniza o trabalho.</h3>
+          <p class="text-slate-400 text-[14px] mb-4">Cada tipo de serviço, seu próprio checklist.</p>
+          <div class="mt-auto space-y-1.5 text-[12.5px]">
+            <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-brand"></i><span class="text-slate-300">Inspeção do filtro</span></div>
+            <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-brand"></i><span class="text-slate-300">Limpeza serpentina</span></div>
+            <div class="flex items-center gap-2"><i data-lucide="circle" class="w-4 h-4 text-slate-600"></i><span class="text-slate-500">Teste de pressão</span></div>
+            <div class="flex items-center gap-2"><i data-lucide="circle" class="w-4 h-4 text-slate-600"></i><span class="text-slate-500">Recarga de gás</span></div>
+          </div>
+        </div>
+
+        <!-- Card 6 — WhatsApp (wide) -->
+        <div class="card hover-lift md:col-span-4 p-7 lg:p-8 flex flex-col">
+          <div class="eyebrow cyan mb-3"><span>whatsapp direto</span></div>
+          <h3 class="font-display font-semibold text-[22px] tracking-tighter2 mb-2 leading-tight">Orçamento PDF pro cliente em <span class="tic">3 cliques</span>.</h3>
+          <p class="text-slate-400 text-[14px] max-w-md mb-5">Sua marca, número de protocolo, condições — direto no WhatsApp do cliente.</p>
+          <div class="mt-auto flex items-center gap-3 max-w-md">
+            <div class="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3 flex-1">
+              <i data-lucide="file-text" class="w-5 h-5 text-cyan-brand"></i>
+              <div class="flex-1 min-w-0">
+                <div class="text-[12.5px] text-slate-100 font-medium truncate">Orçamento_OS-1042.pdf</div>
+                <div class="font-mono text-[10px] text-slate-500 mt-0.5">312 KB · pronto</div>
+              </div>
+            </div>
+            <button class="w-11 h-11 rounded-xl grid place-items-center flex-shrink-0" style="background:#16A34A;">
+              <i data-lucide="send" class="w-4 h-4 text-white"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section-pad relative">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="max-w-3xl mb-14">
+        <div class="eyebrow"><span>em 3 passos</span></div>
+        <h2 class="h-section text-[clamp(32px,4vw,52px)] mt-5">
+          Da agenda ao orçamento, <span class="tic">sem fricção.</span>
+        </h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- Step 1 -->
+        <div class="card p-7 lg:p-8 relative">
+          <div class="font-mono text-[11px] tracking-[0.18em] text-slate-500 absolute top-6 right-7">01</div>
+          <!-- geometric illustration -->
+          <div class="h-32 mb-6 flex items-end gap-3">
+            <div class="w-12 h-20 rounded-md bg-slate-800 border border-slate-700"></div>
+            <div class="w-12 h-28 rounded-md" style="background:linear-gradient(180deg,rgba(0,184,212,0.25),rgba(0,184,212,0.05)); border:1px solid rgba(0,184,212,0.3);">
+              <div class="w-full h-1.5 mt-3 mx-auto" style="background: rgba(0,184,212,0.6);"></div>
+            </div>
+            <div class="w-12 h-16 rounded-md bg-slate-800 border border-slate-700"></div>
+          </div>
+          <h3 class="font-display font-semibold text-[22px] tracking-tighter2 mb-2 leading-tight">Cadastra cliente e equipamento</h3>
+          <p class="text-slate-400 text-[15px]">Em segundos, com QR code automático para o equipamento.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="card p-7 lg:p-8 relative">
+          <div class="font-mono text-[11px] tracking-[0.18em] text-slate-500 absolute top-6 right-7">02</div>
+          <div class="h-32 mb-6 relative">
+            <div class="absolute left-0 top-0 w-20 h-32 rounded-xl border border-slate-700 bg-slate-800"></div>
+            <div class="absolute left-8 top-4 w-20 h-32 rounded-xl border border-slate-700 bg-slate-800/80"></div>
+            <div class="absolute left-16 top-8 w-20 h-32 rounded-xl border" style="background: linear-gradient(180deg,rgba(0,184,212,0.18),rgba(0,184,212,0.04)); border-color: rgba(0,184,212,0.4);">
+              <div class="absolute inset-3 flex flex-col gap-2">
+                <div class="h-2 rounded" style="background:rgba(0,184,212,0.7);"></div>
+                <div class="h-2 rounded bg-slate-700"></div>
+                <div class="h-2 rounded bg-slate-700 w-2/3"></div>
+              </div>
+            </div>
+          </div>
+          <h3 class="font-display font-semibold text-[22px] tracking-tighter2 mb-2 leading-tight">Técnico atende com app</h3>
+          <p class="text-slate-400 text-[15px]">Fotos, checklist, assinatura — tudo no celular.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="card p-7 lg:p-8 relative">
+          <div class="font-mono text-[11px] tracking-[0.18em] text-slate-500 absolute top-6 right-7">03</div>
+          <div class="h-32 mb-6 flex items-center justify-center gap-4">
+            <div class="w-16 h-20 rounded-md bg-slate-800 border border-slate-700 grid place-items-center">
+              <i data-lucide="file-text" class="w-6 h-6 text-cyan-brand"></i>
+            </div>
+            <i data-lucide="arrow-right" class="w-6 h-6 text-slate-600"></i>
+            <div class="w-12 h-12 rounded-xl grid place-items-center" style="background:#16A34A;">
+              <i data-lucide="message-circle" class="w-6 h-6 text-white"></i>
+            </div>
+          </div>
+          <h3 class="font-display font-semibold text-[22px] tracking-tighter2 mb-2 leading-tight">Orçamento direto no WhatsApp</h3>
+          <p class="text-slate-400 text-[15px]">PDF profissional com sua marca, em 3 cliques.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="section-pad relative">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="max-w-3xl mb-12">
+        <div class="eyebrow"><span>klimar vs concorrência</span></div>
+        <h2 class="h-section text-[clamp(32px,4vw,52px)] mt-5">
+          O Excel funciona <span class="tic">— até parar de funcionar.</span>
+        </h2>
+      </div>
+      <div class="card p-2 sm:p-4 overflow-x-auto">
+        <table class="w-full min-w-[640px]" style="border-collapse: separate; border-spacing: 0;">
+          <thead>
+            <tr>
+              <th class="text-left p-4 font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 font-semibold">recurso</th>
+              <th class="p-4 font-mono text-[11px] tracking-[0.16em] uppercase font-semibold text-cyan-brand text-center" style="background:rgba(0,184,212,0.06); border-radius: 8px 8px 0 0;">klimar</th>
+              <th class="p-4 font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 font-semibold text-center">auvo</th>
+              <th class="p-4 font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 font-semibold text-center">field control</th>
+              <th class="p-4 font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 font-semibold text-center">excel</th>
+            </tr>
+          </thead>
+          <tbody class="text-[14px]">
+            <!-- helper rows -->
+            <tr class="border-t border-slate-800">
+              <td class="p-4 text-slate-200">Plano gratuito real</td>
+              <td class="p-4 text-center" style="background:rgba(0,184,212,0.04);"><i data-lucide="check" class="w-5 h-5 text-cyan-brand inline-block"></i></td>
+              <td class="p-4 text-center"><i data-lucide="x" class="w-5 h-5 text-slate-600 inline-block"></i></td>
+              <td class="p-4 text-center"><i data-lucide="x" class="w-5 h-5 text-slate-600 inline-block"></i></td>
+              <td class="p-4 text-center text-slate-500">—</td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="p-4 text-slate-200">Setup pago</td>
+              <td class="p-4 text-center font-semibold text-cyan-brand" style="background:rgba(0,184,212,0.04);">R$&nbsp;0</td>
+              <td class="p-4 text-center text-slate-400">Negociado</td>
+              <td class="p-4 text-center text-slate-400">R$&nbsp;299</td>
+              <td class="p-4 text-center text-slate-500">—</td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="p-4 text-slate-200">App moderno (Flutter)</td>
+              <td class="p-4 text-center" style="background:rgba(0,184,212,0.04);"><i data-lucide="check" class="w-5 h-5 text-cyan-brand inline-block"></i></td>
+              <td class="p-4 text-center"><i data-lucide="alert-triangle" class="w-5 h-5 inline-block tick-warn"></i></td>
+              <td class="p-4 text-center"><i data-lucide="alert-triangle" class="w-5 h-5 inline-block tick-warn"></i></td>
+              <td class="p-4 text-center"><i data-lucide="x" class="w-5 h-5 text-slate-600 inline-block"></i></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="p-4 text-slate-200">PMOC nativo</td>
+              <td class="p-4 text-center" style="background:rgba(0,184,212,0.04);">
+                <span class="inline-flex items-center gap-1.5"><i data-lucide="check" class="w-5 h-5 text-cyan-brand"></i><span class="font-mono text-[10px] tracking-[0.14em] uppercase text-slate-400">business</span></span>
+              </td>
+              <td class="p-4 text-center text-slate-400">Add-on</td>
+              <td class="p-4 text-center text-slate-400">Add-on</td>
+              <td class="p-4 text-center"><i data-lucide="x" class="w-5 h-5 text-slate-600 inline-block"></i></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="p-4 text-slate-200">WhatsApp integrado</td>
+              <td class="p-4 text-center" style="background:rgba(0,184,212,0.04);"><i data-lucide="check" class="w-5 h-5 text-cyan-brand inline-block"></i></td>
+              <td class="p-4 text-center"><i data-lucide="alert-triangle" class="w-5 h-5 inline-block tick-warn"></i></td>
+              <td class="p-4 text-center"><i data-lucide="alert-triangle" class="w-5 h-5 inline-block tick-warn"></i></td>
+              <td class="p-4 text-center"><i data-lucide="x" class="w-5 h-5 text-slate-600 inline-block"></i></td>
+            </tr>
+            <tr class="border-t border-slate-800">
+              <td class="p-4 text-slate-200">Preço de entrada</td>
+              <td class="p-4 text-center font-semibold text-cyan-brand" style="background:rgba(0,184,212,0.04); border-radius: 0 0 8px 8px;">R$&nbsp;49<span class="text-slate-400 font-normal text-[12px]">/mês</span></td>
+              <td class="p-4 text-center text-slate-400">R$&nbsp;134+<span class="text-[12px]">/mês</span></td>
+              <td class="p-4 text-center text-slate-400">R$&nbsp;89+<span class="text-[12px]">/mês</span></td>
+              <td class="p-4 text-center text-slate-400">"Grátis"&nbsp;*</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="font-mono text-[10px] tracking-[0.14em] uppercase text-slate-500 mt-5">* até começar a perder atendimentos</p>
+    </div>
+  </section>
+
+  <!-- PRICING TEASER -->
+  <section class="section-pad relative">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="max-w-3xl mb-14">
+        <div class="eyebrow"><span>preços</span></div>
+        <h2 class="h-section text-[clamp(32px,4vw,52px)] mt-5">
+          Comece grátis. <span class="tic">Cresce</span> quando você crescer.
+        </h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- Free -->
+        <div class="card p-8 flex flex-col">
+          <div class="font-display font-semibold text-[22px] tracking-tighter2">Free</div>
+          <div class="text-slate-400 text-[14px] mt-1">Para começar e ficar.</div>
+          <div class="mt-7 mb-2 flex items-baseline gap-2">
+            <span class="font-display font-bold text-[52px] tracking-tightest leading-none">R$&nbsp;0</span>
+            <span class="text-slate-500 text-[14px]">/mês</span>
+          </div>
+          <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mb-7">para sempre</div>
+          <ul class="space-y-3 text-[14.5px] text-slate-300 mb-8">
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>1 usuário</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>20 OS por mês</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>Fotos antes/depois</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>Assinatura digital</li>
+          </ul>
+          <button class="btn-ghost mt-auto justify-center">Começar grátis</button>
+        </div>
+
+        <!-- Pro - highlighted -->
+        <div class="card pricing-popular p-8 flex flex-col">
+          <span class="popular-badge">mais popular</span>
+          <div class="font-display font-semibold text-[22px] tracking-tighter2">Pro</div>
+          <div class="text-slate-400 text-[14px] mt-1">Quando o negócio cresce.</div>
+          <div class="mt-7 mb-2 flex items-baseline gap-2">
+            <span class="font-display font-bold text-[52px] tracking-tightest leading-none">R$&nbsp;49</span>
+            <span class="text-slate-500 text-[14px]">/mês</span>
+          </div>
+          <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mb-7">ou r$&nbsp;39/mês no anual</div>
+          <ul class="space-y-3 text-[14.5px] text-slate-200 mb-8">
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>OS, clientes e técnicos ilimitados</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>Branding seu (logo + cor)</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>Dashboard de KPIs</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>WhatsApp + PDF de orçamento</li>
+          </ul>
+          <button class="btn-primary mt-auto justify-center">Testar 14 dias grátis</button>
+        </div>
+
+        <!-- Business -->
+        <div class="card p-8 flex flex-col">
+          <div class="font-display font-semibold text-[22px] tracking-tighter2">Business</div>
+          <div class="text-slate-400 text-[14px] mt-1">Operação multi-técnico séria.</div>
+          <div class="mt-7 mb-2 flex items-baseline gap-2">
+            <span class="font-display font-bold text-[52px] tracking-tightest leading-none">R$&nbsp;119</span>
+            <span class="text-slate-500 text-[14px]">/usuário/mês</span>
+          </div>
+          <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mb-7">mín. 3 usuários</div>
+          <ul class="space-y-3 text-[14.5px] text-slate-300 mb-8">
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>PMOC nativo</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>Roteirização inteligente</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>NPS pós-atendimento</li>
+            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-1 flex-shrink-0"></i>API e integrações</li>
+          </ul>
+          <button class="btn-secondary mt-auto justify-center">Falar com vendas</button>
+        </div>
+      </div>
+      <div class="text-center mt-10">
+        <a href="#/precos" data-route="/precos" class="inline-flex items-center gap-2 text-cyan-brand text-[14.5px] font-medium hover:gap-3 transition-all">
+          Ver comparativo completo <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="section-pad relative">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="card relative max-w-3xl mx-auto p-10 lg:p-14 overflow-hidden">
+        <div class="absolute -top-32 -right-32 w-[400px] h-[400px] rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(0,184,212,0.18), transparent 60%);"></div>
+        <div class="eyebrow mb-6"><span>founding customer</span></div>
+        <blockquote class="font-display italic text-[clamp(24px,3vw,32px)] tracking-tighter3 leading-[1.25] text-slate-100 mb-8">
+          "[Aguardando depoimento da PHP Ar Condicionado e Elétrica — Founding Customer.]"
+        </blockquote>
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full" style="background: linear-gradient(135deg,#4DD0E1,#006C7F);"></div>
+          <div>
+            <div class="text-[15px] font-semibold text-slate-100">[Nome do contato] <span class="text-slate-500 font-normal">— Diretor</span></div>
+            <div class="text-[13px] text-slate-400 mt-0.5">PHP Ar Condicionado e Elétrica</div>
+          </div>
+          <div class="ml-auto hidden sm:flex items-center gap-2 px-3 py-2 rounded-md border border-dashed border-slate-700 font-mono text-[10px] tracking-[0.14em] uppercase text-slate-500">
+            <i data-lucide="image" class="w-3.5 h-3.5"></i> logo php
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-pad relative">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8">
+      <div class="mb-12">
+        <div class="eyebrow"><span>dúvidas comuns</span></div>
+        <h2 class="h-section text-[clamp(32px,4vw,48px)] mt-5">Perguntas frequentes.</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-trigger">Posso usar de graça pra sempre?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button>
+          <div class="faq-body"><p>Sim. O plano Free é gratuito para sempre, sem cartão e sem letra miúda. Inclui 1 usuário, 20 OS por mês, fotos antes/depois e assinatura digital. Quando precisar de mais, você decide.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-trigger">Quando preciso pagar?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button>
+          <div class="faq-body"><p>Quando bater o limite de OS no Free, ou quando quiser branding próprio, dashboard avançado e usuários extras. O Pro é R$ 49/mês — abaixo do que custa um almoço de equipe.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-trigger">Posso cancelar quando quiser?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button>
+          <div class="faq-body"><p>Sim, no painel, em dois cliques, sem ligar pra ninguém. Você fica com seus dados — exporta tudo em CSV/PDF antes de sair.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-trigger">Meus dados são meus?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button>
+          <div class="faq-body"><p>São. Klimar é LGPD compliant via iubenda, hospedado no Brasil, e exportação completa em qualquer plano — incluindo o Free. A gente não vende, não compartilha, não treina IA com os seus dados.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-trigger">Funciona no celular do meu técnico?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button>
+          <div class="faq-body"><p>App Flutter nativo, Android e iOS. Funciona offline — sincroniza quando volta o sinal. Pensado pra usar com luva, no telhado, no sol direto.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-trigger">Como sei se Klimar serve pra minha empresa?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button>
+          <div class="faq-body"><p>Se você é autônomo, MEI ou empresa de até 50 técnicos em HVAC, elétrica, refrigeração ou manutenção predial — Klimar serve. Crie a conta Free, importe um cliente, faça uma OS de teste. Você sabe em 10 minutos.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="relative overflow-hidden" style="background: #020617;">
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,184,212,0.18), transparent 70%);"></div>
+    <div class="absolute inset-0 grid-pattern opacity-50"></div>
+    <div class="relative max-w-5xl mx-auto px-6 lg:px-8 py-32 lg:py-40 text-center">
+      <h2 class="h-display text-[clamp(40px,6vw,72px)] mb-6">Comece a usar o Klimar <span class="tic">hoje.</span></h2>
+      <p class="text-slate-400 text-[18px] lg:text-[20px] max-w-xl mx-auto mb-10">Grátis. Sem cartão. Sem letra miúda.</p>
+      <div class="flex flex-wrap justify-center items-center gap-4">
+        <button class="btn-primary xl" style="box-shadow: 0 0 80px rgba(0,184,212,0.5), 0 1px 0 rgba(255,255,255,0.2) inset;">Criar conta grátis <i data-lucide="arrow-right" class="w-5 h-5"></i></button>
+        <button class="btn-ghost" style="padding: 22px 32px; font-size: 17px;">Falar com vendas</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ==================================================================== -->
+<!-- PAGE: PRECOS (#/precos) -->
+<!-- ==================================================================== -->
+<main id="page-precos" class="page" data-screen-label="Preços">
+
+  <section class="relative pt-[112px] pb-12 overflow-hidden">
+    <div class="orb orb-1" style="opacity:0.12;"></div>
+    <div class="grid-pattern absolute inset-0"></div>
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-8 text-center">
+      <div class="eyebrow justify-center inline-flex"><span>preços</span></div>
+      <h1 class="h-display text-[clamp(48px,7vw,84px)] mt-5 mb-6">Preços simples, <span class="tic">transparentes.</span></h1>
+      <p class="text-slate-300 text-[18px] lg:text-[20px] max-w-2xl mx-auto mb-12">Comece grátis. Pague apenas quando crescer. Cancela quando quiser.</p>
+
+      <!-- Billing toggle -->
+      <div class="billing-toggle inline-flex" id="billing-toggle">
+        <button data-billing="monthly" class="active">Mensal</button>
+        <button data-billing="yearly">
+          Anual <span class="savings-badge">economize 20%</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 plan cards -->
+  <section class="relative pb-20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+        <!-- Free -->
+        <div class="card p-7 flex flex-col">
+          <div class="font-display font-semibold text-[20px] tracking-tighter2">Free</div>
+          <div class="text-slate-400 text-[13px] mt-1">Pra autônomos.</div>
+          <div class="mt-6 mb-1 flex items-baseline gap-1.5">
+            <span class="font-display font-bold text-[44px] tracking-tightest leading-none">R$&nbsp;0</span>
+            <span class="text-slate-500 text-[13px]">/mês</span>
+          </div>
+          <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mb-6">para sempre</div>
+          <ul class="space-y-2.5 text-[14px] text-slate-300 mb-7">
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>1 usuário</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>20 OS / mês</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Fotos antes/depois</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Assinatura digital</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Exportação CSV / PDF</li>
+          </ul>
+          <button class="btn-ghost mt-auto justify-center">Começar grátis</button>
+        </div>
+
+        <!-- Pro popular -->
+        <div class="card pricing-popular p-7 flex flex-col">
+          <span class="popular-badge">mais popular</span>
+          <div class="font-display font-semibold text-[20px] tracking-tighter2">Pro</div>
+          <div class="text-slate-400 text-[13px] mt-1">Pra empresas pequenas.</div>
+          <div class="mt-6 mb-1 flex items-baseline gap-1.5">
+            <span class="font-display font-bold text-[44px] tracking-tightest leading-none price-pro">R$&nbsp;49</span>
+            <span class="text-slate-500 text-[13px]">/mês</span>
+          </div>
+          <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mb-6 billing-note-pro">cobrança mensal</div>
+          <ul class="space-y-2.5 text-[14px] text-slate-200 mb-7">
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>OS ilimitadas</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Até 3 usuários</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Branding próprio</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Dashboard de KPIs</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>WhatsApp + PDF</li>
+          </ul>
+          <button class="btn-primary mt-auto justify-center">Testar 14 dias grátis</button>
+        </div>
+
+        <!-- Business -->
+        <div class="card p-7 flex flex-col">
+          <div class="font-display font-semibold text-[20px] tracking-tighter2">Business</div>
+          <div class="text-slate-400 text-[13px] mt-1">Pra operação multi-técnico.</div>
+          <div class="mt-6 mb-1 flex items-baseline gap-1.5">
+            <span class="font-display font-bold text-[44px] tracking-tightest leading-none price-business">R$&nbsp;119</span>
+            <span class="text-slate-500 text-[13px]">/usuário/mês</span>
+          </div>
+          <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mb-6">mín. 3 usuários</div>
+          <ul class="space-y-2.5 text-[14px] text-slate-300 mb-7">
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Tudo do Pro</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>PMOC nativo</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Roteirização inteligente</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>NPS pós-atendimento</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>API & integrações</li>
+          </ul>
+          <button class="btn-secondary mt-auto justify-center">Falar com vendas</button>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="card p-7 flex flex-col">
+          <div class="font-display font-semibold text-[20px] tracking-tighter2">Enterprise</div>
+          <div class="text-slate-400 text-[13px] mt-1">Pra grandes operações.</div>
+          <div class="mt-6 mb-1 flex items-baseline gap-1.5">
+            <span class="font-display font-bold text-[44px] tracking-tightest leading-none">Sob&nbsp;medida</span>
+          </div>
+          <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mb-6">contrato anual</div>
+          <ul class="space-y-2.5 text-[14px] text-slate-300 mb-7">
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>SSO / SAML</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>SLA dedicado</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>CSM dedicado</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Onboarding presencial</li>
+            <li class="flex gap-2.5"><i data-lucide="check" class="w-4 h-4 text-cyan-brand mt-0.5 flex-shrink-0"></i>Hospedagem dedicada</li>
+          </ul>
+          <button class="btn-secondary mt-auto justify-center">Solicitar proposta</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison table -->
+  <section class="relative pb-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="mb-10">
+        <div class="eyebrow"><span>comparativo completo</span></div>
+        <h2 class="h-section text-[clamp(28px,3.5vw,40px)] mt-4">Tudo o que vai em <span class="tic">cada plano.</span></h2>
+      </div>
+      <div class="card overflow-x-auto">
+        <table class="pricing-table min-w-[820px]">
+          <thead>
+            <tr>
+              <th>Recurso</th>
+              <th class="col-klimar text-cyan-brand text-center" style="background:rgba(0,184,212,0.06);">Free</th>
+              <th class="col-klimar text-cyan-brand text-center" style="background:rgba(0,184,212,0.06);">Pro</th>
+              <th class="col-klimar text-cyan-brand text-center" style="background:rgba(0,184,212,0.06);">Business</th>
+              <th class="col-klimar text-cyan-brand text-center" style="background:rgba(0,184,212,0.06);">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="cat-row"><td colspan="5">limites</td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Usuários</th><td class="text-center text-slate-300">1</td><td class="text-center text-slate-300">3</td><td class="text-center text-slate-300">Ilimitados</td><td class="text-center text-slate-300">Ilimitados</td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">OS por mês</th><td class="text-center text-slate-300">20</td><td class="text-center text-slate-300">Ilimitadas</td><td class="text-center text-slate-300">Ilimitadas</td><td class="text-center text-slate-300">Ilimitadas</td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Clientes cadastrados</th><td class="text-center text-slate-300">100</td><td class="text-center text-slate-300">Ilimitados</td><td class="text-center text-slate-300">Ilimitados</td><td class="text-center text-slate-300">Ilimitados</td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Armazenamento de fotos</th><td class="text-center text-slate-300">2 GB</td><td class="text-center text-slate-300">25 GB</td><td class="text-center text-slate-300">200 GB</td><td class="text-center text-slate-300">Sob medida</td></tr>
+
+            <tr class="cat-row"><td colspan="5">recursos básicos</td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">App mobile (iOS / Android)</th><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Fotos antes/depois</th><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Assinatura digital</th><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">QR code de equipamento</th><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Checklist por serviço</th><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+
+            <tr class="cat-row"><td colspan="5">recursos pro</td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Logo + cor próprios</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Dashboard de KPIs</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">PDF de orçamento + WhatsApp</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Histórico por equipamento</th><td class="text-center text-slate-500">Limitado</td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+
+            <tr class="cat-row"><td colspan="5">recursos business</td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">PMOC nativo</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Roteirização inteligente</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">NPS pós-atendimento</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">API + Webhooks</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">SSO / SAML</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+
+            <tr class="cat-row"><td colspan="5">suporte</td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Suporte por e-mail</th><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">Chat em horário comercial</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">CSM dedicado</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="check" class="w-4 h-4 text-cyan-brand inline-block"></i></td></tr>
+            <tr><th class="text-left text-[14px] text-slate-200 font-normal">SLA contratual</th><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center"><i data-lucide="x" class="w-4 h-4 text-slate-600 inline-block"></i></td><td class="text-center text-slate-300">99.5%</td><td class="text-center text-slate-300">99.95%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing FAQ -->
+  <section class="pb-24">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8">
+      <div class="mb-12">
+        <div class="eyebrow"><span>dúvidas de pricing</span></div>
+        <h2 class="h-section text-[clamp(28px,3.5vw,40px)] mt-4">Antes de <span class="tic">assinar.</span></h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item"><button class="faq-trigger">A cobrança anual realmente economiza 20%?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button><div class="faq-body"><p>Sim. No Pro, o anual sai a R$ 39/mês cobrado uma vez ao ano (R$ 468/ano), versus R$ 49/mês no mensal (R$ 588/ano). Você economiza R$ 120/ano por usuário.</p></div></div>
+        <div class="faq-item"><button class="faq-trigger">Posso mudar de plano a qualquer momento?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button><div class="faq-body"><p>Sim, a qualquer momento. Upgrades são imediatos com cobrança proporcional. Downgrades entram em vigor no próximo ciclo.</p></div></div>
+        <div class="faq-item"><button class="faq-trigger">Quais formas de pagamento vocês aceitam?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button><div class="faq-body"><p>Cartão de crédito (todas as bandeiras), boleto bancário (somente anual) e Pix recorrente.</p></div></div>
+        <div class="faq-item"><button class="faq-trigger">Tem teste grátis do Pro?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button><div class="faq-body"><p>14 dias de Pro grátis, sem cartão. Se não quiser continuar, sua conta cai automaticamente pro Free — seus dados ficam.</p></div></div>
+        <div class="faq-item"><button class="faq-trigger">Como funciona o "mín. 3 usuários" do Business?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button><div class="faq-body"><p>O Business cobra por usuário ativo, com mínimo de 3. Ou seja, R$ 357/mês cobre até 3 técnicos; o 4º técnico adiciona R$ 119.</p></div></div>
+        <div class="faq-item"><button class="faq-trigger">Existe taxa de setup ou implantação?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button><div class="faq-body"><p>R$ 0 em todos os planos exceto Enterprise (que inclui onboarding presencial). Você cria a conta e começa.</p></div></div>
+        <div class="faq-item"><button class="faq-trigger">E se eu cancelar — perco meus dados?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button><div class="faq-body"><p>Não. Você mantém acesso ao plano Free indefinidamente. Pode também exportar tudo (CSV / PDF) antes de cancelar definitivamente.</p></div></div>
+        <div class="faq-item"><button class="faq-trigger">Vocês emitem nota fiscal?<i data-lucide="chevron-down" class="w-5 h-5 faq-chev"></i></button><div class="faq-body"><p>NFS-e emitida automaticamente todo mês, em PDF e XML, no painel.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA reused -->
+  <section class="relative overflow-hidden" style="background: #020617;">
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,184,212,0.18), transparent 70%);"></div>
+    <div class="relative max-w-5xl mx-auto px-6 lg:px-8 py-32 text-center">
+      <h2 class="h-display text-[clamp(40px,5vw,60px)] mb-5">Comece com o Free <span class="tic">hoje.</span></h2>
+      <p class="text-slate-400 text-[18px] max-w-xl mx-auto mb-10">Pague apenas quando precisar de mais. Cancela quando quiser.</p>
+      <div class="flex flex-wrap justify-center items-center gap-4">
+        <button class="btn-primary lg">Criar conta grátis <i data-lucide="arrow-right" class="w-5 h-5"></i></button>
+        <button class="btn-ghost" style="padding: 18px 28px;">Falar com vendas</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ==================================================================== -->
+<!-- PAGE: SOBRE (#/sobre) -->
+<!-- ==================================================================== -->
+<main id="page-sobre" class="page" data-screen-label="Sobre">
+
+  <section class="relative pt-[112px] pb-20 overflow-hidden">
+    <div class="orb orb-1" style="opacity:0.14;"></div>
+    <div class="orb orb-2" style="opacity:0.16;"></div>
+    <div class="grid-pattern absolute inset-0"></div>
+    <div class="relative max-w-5xl mx-auto px-6 lg:px-8 pt-12">
+      <div class="eyebrow"><span>sobre a klimar</span></div>
+      <h1 class="h-display text-[clamp(48px,7vw,92px)] mt-5 mb-8">Construído por quem <span class="tic">vive</span> o problema.</h1>
+      <p class="text-slate-300 text-[19px] lg:text-[22px] max-w-3xl leading-[1.5]">
+        Klimar é a ferramenta de gestão que a gente queria pra própria empresa de manutenção — e não encontrou. Então construímos.
+      </p>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="section-pad">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-4">
+          <div class="eyebrow"><span>nossa missão</span></div>
+          <h2 class="h-section text-[clamp(28px,3.5vw,40px)] mt-4">Tirar o técnico do <span class="tic">caderninho.</span></h2>
+        </div>
+        <div class="lg:col-span-8 space-y-6 text-slate-300 text-[17px] leading-[1.7]">
+          <p>O Brasil tem 1.4 milhão de profissionais em serviços técnicos especializados. Eletricistas, técnicos de ar-condicionado, instaladores de refrigeração, manutenção predial. A grande maioria ainda gerencia o próprio negócio em caderno, WhatsApp e planilha.</p>
+          <p>Klimar existe pra mudar isso — sem hostilizar quem está começando. Free de verdade, sem letra miúda, com dados que continuam sendo seus se você decidir sair. E quando o negócio crescer, a gente cresce junto, sem exigir um VP de TI pra implementar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who we are -->
+  <section class="pb-24">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-4">
+          <div class="eyebrow"><span>quem somos</span></div>
+          <h2 class="h-section text-[clamp(28px,3.5vw,40px)] mt-4">Time pequeno. <span class="tic">Foco grande.</span></h2>
+        </div>
+        <div class="lg:col-span-8">
+          <div class="card p-7 mb-5">
+            <div class="flex items-center gap-5">
+              <div class="w-16 h-16 rounded-xl flex-shrink-0" style="background: linear-gradient(135deg,#00B8D4,#006C7F);"></div>
+              <div>
+                <div class="font-display font-semibold text-[20px] tracking-tighter2">iaverde</div>
+                <p class="text-slate-400 text-[14px] mt-1">Empresa-mãe da Klimar. Brasileira, fundada em 2024. Focada em ferramentas de gestão para o trabalho que acontece em campo.</p>
+              </div>
+            </div>
+          </div>
+          <div class="card p-7">
+            <div class="flex items-start gap-5">
+              <div class="w-16 h-16 rounded-full flex-shrink-0" style="background: linear-gradient(135deg,#4DD0E1,#1E293B);"></div>
+              <div>
+                <div class="font-display font-semibold text-[20px] tracking-tighter2">[Fundador] <span class="text-slate-500 font-normal text-[15px] italic">— founder & CEO</span></div>
+                <p class="text-slate-400 text-[14px] mt-1.5 leading-[1.65]">Engenheiro com 12 anos no setor de refrigeração. Construiu o Klimar resolvendo o problema da própria empresa de manutenção — começou em planilha, virou MVP, virou produto.</p>
+                <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mt-3 flex items-center gap-3">
+                  <span>são paulo, br</span><span class="text-slate-700">·</span><span>cnpj iaverde</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Origin story -->
+  <section class="section-pad">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-4">
+          <div class="eyebrow"><span>como começamos</span></div>
+          <h2 class="h-section text-[clamp(28px,3.5vw,40px)] mt-4">A planilha, a <span class="tic">crise</span>, e o produto.</h2>
+        </div>
+        <div class="lg:col-span-8 space-y-6 text-slate-300 text-[17px] leading-[1.7]">
+          <p>Em 2023, a PHP Ar Condicionado — empresa familiar de 8 técnicos, primeira cliente da Klimar até hoje — perdeu três contratos de manutenção preventiva por causa de PMOC desatualizado. Falhou na auditoria. A planilha de controle não conseguia mais.</p>
+          <p>Avaliaram o Auvo (caro, setup pago), o Field Control (UX dos anos 2000), e o "vamos contratar um dev" (caos). Não tinha um produto que falasse com a empresa pequena brasileira sem cobrar como SaaS gringo.</p>
+          <p>Em 6 meses, o protótipo da Klimar substituiu a planilha. Em 12 meses, a PHP recuperou os contratos perdidos e ganhou três novos. Em 18 meses, virou produto que outras empresas pediam pra usar. Está na sua frente agora.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manifesto - LIGHT SECTION -->
+  <section class="light-section section-pad">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <div class="eyebrow inline-flex justify-center"><span>manifesto</span></div>
+        <h2 class="h-section text-[clamp(32px,4vw,52px)] mt-4">As regras que <span class="tic">não negociamos.</span></h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-x-12 gap-y-12">
+        <div>
+          <div class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold mb-3" style="color: var(--klimar-cyan);">grátis deve ser grátis</div>
+          <p class="text-slate-700 text-[17px] leading-[1.65]">Sem letra miúda, sem ads invasivos, sem deixar feature crítica como "premium" pra forçar upgrade. Free serve negócio real.</p>
+        </div>
+        <div>
+          <div class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold mb-3" style="color: var(--klimar-cyan);">dados são seus</div>
+          <p class="text-slate-700 text-[17px] leading-[1.65]">Exporte tudo, qualquer hora, em CSV e PDF. Inclusive no Free. Sem reféns.</p>
+        </div>
+        <div>
+          <div class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold mb-3" style="color: var(--klimar-cyan);">feito no brasil</div>
+          <p class="text-slate-700 text-[17px] leading-[1.65]">LGPD nativa, suporte em português pelo time que escreveu o código, NF-e brasileira, datacenter no Brasil.</p>
+        </div>
+        <div>
+          <div class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold mb-3" style="color: var(--klimar-cyan);">técnico em campo é prioridade</div>
+          <p class="text-slate-700 text-[17px] leading-[1.65]">Pensado pra usar com luva, no telhado, no sol, com 4G ruim. Offline-first. Não é dashboard de gerente — é ferramenta de campo.</p>
+        </div>
+        <div>
+          <div class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold mb-3" style="color: var(--klimar-cyan);">transparência no preço</div>
+          <p class="text-slate-700 text-[17px] leading-[1.65]">Sem demo obrigatória, sem "fale com vendas" em 90% dos planos, sem upgrade surpresa na fatura.</p>
+        </div>
+        <div>
+          <div class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold mb-3" style="color: var(--klimar-cyan);">construímos com clientes, não pra eles</div>
+          <p class="text-slate-700 text-[17px] leading-[1.65]">Toda feature crítica passou por uso real em uma empresa de manutenção antes de virar release. Sem suposição.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section class="section-pad" id="roadmap">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="mb-14">
+        <div class="eyebrow"><span>roadmap público</span></div>
+        <h2 class="h-section text-[clamp(32px,4vw,52px)] mt-4">O que estamos <span class="tic">construindo agora.</span></h2>
+        <p class="text-slate-400 text-[16px] mt-4 max-w-xl">Roadmap público porque a gente acredita que cliente sério merece saber o que está vindo. Atualizado mensalmente.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="card p-7 road-col road-now">
+          <h4 class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold text-emerald-400 mb-5"><span class="dot"></span>agora · q2 2026</h4>
+          <ul class="space-y-4 text-[14.5px] text-slate-200">
+            <li class="leading-snug"><span class="font-semibold">PMOC nativo</span><br><span class="text-slate-400 text-[13px]">geração automática conforme Lei 13.589/2018</span></li>
+            <li class="leading-snug"><span class="font-semibold">App offline-first v2</span><br><span class="text-slate-400 text-[13px]">sincronização incremental + conflict resolution</span></li>
+            <li class="leading-snug"><span class="font-semibold">Dashboard NPS</span><br><span class="text-slate-400 text-[13px]">pesquisa pós-OS por WhatsApp</span></li>
+          </ul>
+        </div>
+        <div class="card p-7 road-col road-soon">
+          <h4 class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold mb-5" style="color: var(--klimar-cyan);"><span class="dot"></span>em breve · q3 2026</h4>
+          <ul class="space-y-4 text-[14.5px] text-slate-200">
+            <li class="leading-snug"><span class="font-semibold">Roteirização inteligente</span><br><span class="text-slate-400 text-[13px]">otimização de rota multi-técnico</span></li>
+            <li class="leading-snug"><span class="font-semibold">API pública</span><br><span class="text-slate-400 text-[13px]">REST + webhooks para integrações</span></li>
+            <li class="leading-snug"><span class="font-semibold">Cobrança recorrente</span><br><span class="text-slate-400 text-[13px]">contratos de manutenção preventiva</span></li>
+          </ul>
+        </div>
+        <div class="card p-7 road-col road-future">
+          <h4 class="font-mono text-[11px] tracking-[0.16em] uppercase font-semibold text-slate-400 mb-5"><span class="dot"></span>futuro · 2027+</h4>
+          <ul class="space-y-4 text-[14.5px] text-slate-200">
+            <li class="leading-snug"><span class="font-semibold">Marketplace de técnicos</span><br><span class="text-slate-400 text-[13px]">demanda extra → técnicos certificados</span></li>
+            <li class="leading-snug"><span class="font-semibold">Estoque + ordem de compra</span><br><span class="text-slate-400 text-[13px]">peças de reposição integradas</span></li>
+            <li class="leading-snug"><span class="font-semibold">IA de diagnóstico</span><br><span class="text-slate-400 text-[13px]">assistente para o técnico em campo</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="relative overflow-hidden" style="background: #020617;">
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,184,212,0.18), transparent 70%);"></div>
+    <div class="relative max-w-5xl mx-auto px-6 lg:px-8 py-32 text-center">
+      <h2 class="h-display text-[clamp(40px,5vw,64px)] mb-5">Bora <span class="tic">construir junto?</span></h2>
+      <p class="text-slate-400 text-[18px] max-w-xl mx-auto mb-10">Comece grátis, ou converse com o time fundador.</p>
+      <div class="flex flex-wrap justify-center items-center gap-4">
+        <button class="btn-primary lg">Começar grátis <i data-lucide="arrow-right" class="w-5 h-5"></i></button>
+        <button class="btn-ghost" style="padding: 18px 28px;">Falar com fundador</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ==================================================================== -->
+<!-- FOOTER -->
+<!-- ==================================================================== -->
+<footer class="border-t border-slate-800 bg-slate-950">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+      <div class="col-span-2 md:col-span-1">
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="k-mark">k</div>
+          <div class="font-display font-bold text-[18px] tracking-tighter2">klimar<span class="font-mono text-[10px] text-slate-500 align-super">™</span></div>
+        </div>
+        <p class="text-slate-500 text-[13px] leading-relaxed mb-3">A planilha do Excel tem rival.</p>
+        <p class="font-mono text-[10px] tracking-[0.14em] uppercase text-slate-600">um produto da iaverde</p>
+      </div>
+      <div>
+        <h5 class="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold text-slate-400 mb-4">Produto</h5>
+        <ul class="space-y-2.5 text-[14px] text-slate-500">
+          <li><a href="#/#features" class="hover:text-slate-200 transition-colors">Recursos</a></li>
+          <li><a href="#/precos" data-route="/precos" class="hover:text-slate-200 transition-colors">Preços</a></li>
+          <li><a href="#" class="hover:text-slate-200 transition-colors">Status</a></li>
+          <li><a href="#/sobre#roadmap" data-route="/sobre" class="hover:text-slate-200 transition-colors">Roadmap</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold text-slate-400 mb-4">Empresa</h5>
+        <ul class="space-y-2.5 text-[14px] text-slate-500">
+          <li><a href="#/sobre" data-route="/sobre" class="hover:text-slate-200 transition-colors">Sobre</a></li>
+          <li><a href="#" class="hover:text-slate-200 transition-colors">Blog</a></li>
+          <li><a href="mailto:contato@useklimar.com.br" class="hover:text-slate-200 transition-colors">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold text-slate-400 mb-4">Legal</h5>
+        <ul class="space-y-2.5 text-[14px] text-slate-500">
+          <li><a href="#" class="hover:text-slate-200 transition-colors">Termos de uso</a></li>
+          <li><a href="#" class="hover:text-slate-200 transition-colors">Política de privacidade</a></li>
+          <li><a href="#" class="hover:text-slate-200 transition-colors">Cookies</a></li>
+          <li><a href="#" class="hover:text-slate-200 transition-colors">LGPD</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-8 flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between gap-6">
+      <p class="font-mono text-[11px] text-slate-600 tracking-wide">© 2026 iaverde · CNPJ XX.XXX.XXX/0001-XX</p>
+      <div class="flex items-center gap-3 text-slate-500">
+        <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full border border-slate-800 grid place-items-center hover:text-slate-200 hover:border-slate-700 transition-colors">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full border border-slate-800 grid place-items-center hover:text-slate-200 hover:border-slate-700 transition-colors">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" aria-label="X / Twitter" class="w-9 h-9 rounded-full border border-slate-800 grid place-items-center hover:text-slate-200 hover:border-slate-700 transition-colors">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script>
+// Render lucide icons
+lucide.createIcons();
+
+// ===== Hash routing =====
+const pages = {
+  '/':       document.getElementById('page-home'),
+  '/precos': document.getElementById('page-precos'),
+  '/sobre':  document.getElementById('page-sobre'),
+};
+function parseHash() {
+  const raw = (location.hash || '#/').replace(/^#/, '');
+  const [path, anchor] = raw.split('#');
+  return { path: path || '/', anchor: anchor || null };
+}
+function applyRoute() {
+  const { path, anchor } = parseHash();
+  const target = pages[path] || pages['/'];
+  Object.values(pages).forEach(p => p.classList.remove('active'));
+  target.classList.add('active');
+  // jump to top or to anchor
+  requestAnimationFrame(() => {
+    if (anchor) {
+      const el = document.getElementById(anchor);
+      if (el) {
+        const offset = 80;
+        const y = el.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        return;
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  });
+}
+window.addEventListener('hashchange', applyRoute);
+applyRoute();
+
+// ===== Mobile menu =====
+const menu = document.getElementById('mobile-menu');
+document.getElementById('mobile-menu-btn').addEventListener('click', () => menu.classList.add('open'));
+document.getElementById('mobile-menu-close').addEventListener('click', () => menu.classList.remove('open'));
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+
+// ===== Audience toggle =====
+(function () {
+  const toggle = document.getElementById('audience-toggle');
+  if (!toggle) return;
+  const pill = toggle.querySelector('.seg-pill');
+  const buttons = toggle.querySelectorAll('button');
+  const caption = document.getElementById('aud-caption');
+  const captions = {
+    solo: 'destaca: free · 1 técnico · 20 os/mês · sem branding',
+    company: 'destaca: pro · até 3 técnicos · branding · dashboard',
+  };
+  function place(btn) {
+    const r = btn.getBoundingClientRect();
+    const pr = toggle.getBoundingClientRect();
+    pill.style.left = (r.left - pr.left) + 'px';
+    pill.style.width = r.width + 'px';
+  }
+  function activate(btn) {
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    place(btn);
+    caption.textContent = captions[btn.dataset.aud];
+  }
+  buttons.forEach(b => b.addEventListener('click', () => activate(b)));
+  // initial
+  requestAnimationFrame(() => activate(toggle.querySelector('button.active')));
+  window.addEventListener('resize', () => place(toggle.querySelector('button.active')));
+})();
+
+// ===== FAQ accordion =====
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-trigger').addEventListener('click', () => {
+    const wasOpen = item.classList.contains('open');
+    // close siblings within same list
+    item.parentElement.querySelectorAll('.faq-item.open').forEach(o => o.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// ===== Billing toggle (precos) =====
+(function () {
+  const t = document.getElementById('billing-toggle');
+  if (!t) return;
+  const buttons = t.querySelectorAll('button');
+  const proPrice = document.querySelector('.price-pro');
+  const proNote = document.querySelector('.billing-note-pro');
+  const businessPrice = document.querySelector('.price-business');
+  buttons.forEach(b => b.addEventListener('click', () => {
+    buttons.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const yearly = b.dataset.billing === 'yearly';
+    if (proPrice) proPrice.innerHTML = yearly ? 'R$&nbsp;39' : 'R$&nbsp;49';
+    if (proNote) proNote.textContent = yearly ? 'cobrado anualmente · economiza 20%' : 'cobrança mensal';
+    if (businessPrice) businessPrice.innerHTML = yearly ? 'R$&nbsp;95' : 'R$&nbsp;119';
+  }));
+})();
+
+// ===== route-link helper for clicks (so scroll to top happens cleanly) =====
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#/"]');
+  if (!a) return;
+  // let browser handle hash change; just close mobile menu
+  menu.classList.remove('open');
+});
+</script>
+
+</body>
+</html>
