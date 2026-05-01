@@ -15,7 +15,7 @@ import { RoadmapSection } from "@/components/marketing/roadmap";
 export const metadata: Metadata = {
   title: "Sobre · Construído por quem vive o problema",
   description:
-    "Klimar é o produto da iaverde — empresa brasileira nascida da própria operação de manutenção. Manifesto, time, e roadmap público.",
+    "Klimar é o produto da IAVerde — startup brasileira de base tecnológica baseada no Rio de Janeiro. Manifesto, time, e roadmap público.",
   alternates: { canonical: "/sobre" },
 };
 

@@ -11,7 +11,6 @@ import { HowItWorks } from "@/components/marketing/how-it-works";
 import { MarketingNav } from "@/components/marketing/nav";
 import { PricingTeaser } from "@/components/marketing/pricing-teaser";
 import { StatsSection } from "@/components/marketing/stats-section";
-import { Testimonial } from "@/components/marketing/testimonial";
 import { HOME_FAQS } from "@/lib/faqs";
 
 export const metadata: Metadata = {
@@ -32,7 +31,6 @@ export default function HomePage() {
         <HowItWorks />
         <ComparisonTeaser />
         <PricingTeaser />
-        <Testimonial />
         <FaqSection
           eyebrow="dúvidas comuns"
           title="Perguntas frequentes."

@@ -1,6 +1,6 @@
 # Klimar™ — useklimar.com.br
 
-Site institucional do Klimar — SaaS de gestão para serviços técnicos (HVAC, elétrica, refrigeração, manutenção predial). Construído pela iaverde.
+Site institucional do Klimar — SaaS de gestão para serviços técnicos (HVAC, elétrica, refrigeração, manutenção predial). Construído pela IAVerde.
 
 ## Stack
 
@@ -54,4 +54,4 @@ Vercel (recomendado). Configurar:
 3. Migration `supabase/migrations/001_marketing_tables.sql` no Supabase
 4. Domínio verificado no Resend (DNS records SPF/DKIM/DMARC no registro.br)
 
-Marca: **Klimar™** · Empresa: **iaverde**
+Marca: **Klimar™** · Empresa: **IAVerde**

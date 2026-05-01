@@ -15,7 +15,7 @@ export function waitlistWelcomeHtml(): string {
       </p>
       <a href="${SITE.url}/sobre#roadmap" style="display:inline-block;background:#00B8D4;color:#021018;font-weight:600;padding:14px 24px;border-radius:999px;text-decoration:none;">Ver roadmap</a>
       <hr style="margin:48px 0 24px;border:0;border-top:1px solid #334155;" />
-      <p style="font-size:12px;color:#64748B;line-height:1.5;margin:0;">Klimar™ é uma marca da iaverde — gestão para serviços técnicos.</p>
+      <p style="font-size:12px;color:#64748B;line-height:1.5;margin:0;">Klimar™ é uma marca da IAVerde — gestão para serviços técnicos.</p>
     </div>
   </body>
 </html>`;

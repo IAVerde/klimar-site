@@ -78,12 +78,25 @@ export function WhoWeAreSection() {
                 />
                 <div>
                   <div className="font-display font-semibold text-[20px] tracking-tighter2">
-                    iaverde
+                    IAVerde
                   </div>
                   <p className="text-slate-400 text-[14px] mt-1">
-                    Empresa-mãe da Klimar. Brasileira, fundada em 2024. Focada em
-                    ferramentas de gestão para o trabalho que acontece em campo.
+                    Startup brasileira de base tecnológica que desenvolve software, IA
+                    aplicada e infraestrutura digital para resolver problemas concretos
+                    com impacto mensurável. Klimar é o primeiro produto.
                   </p>
+                  <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mt-3 flex items-center gap-3">
+                    <span>rio de janeiro, br</span>
+                    <span className="text-slate-700">·</span>
+                    <a
+                      href="https://iaverde.ia.br"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-[#00B8D4] transition-colors"
+                    >
+                      iaverde.ia.br
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -107,9 +120,9 @@ export function WhoWeAreSection() {
                     planilha, virou MVP, virou produto.
                   </p>
                   <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mt-3 flex items-center gap-3">
-                    <span>são paulo, br</span>
+                    <span>rio de janeiro, br</span>
                     <span className="text-slate-700">·</span>
-                    <span>cnpj iaverde</span>
+                    <span>IAVerde</span>
                   </div>
                 </div>
               </div>
@@ -131,25 +144,27 @@ export function OriginStorySection() {
               <span>como começamos</span>
             </div>
             <h2 className="h-section text-[clamp(28px,3.5vw,40px)] mt-4">
-              A planilha, a <span className="tic">crise</span>, e o produto.
+              A planilha, a dor real, <span className="tic">e o produto.</span>
             </h2>
           </div>
           <div className="lg:col-span-8 space-y-6 text-slate-300 text-[17px] leading-[1.7]">
             <p>
-              Em 2023, a PHP Ar Condicionado — empresa familiar de 8 técnicos, primeira
-              cliente da Klimar até hoje — perdeu três contratos de manutenção preventiva
-              por causa de PMOC desatualizado. Falhou na auditoria. A planilha de controle
-              não conseguia mais.
+              Klimar nasceu da convivência diária com técnicos, MEIs e pequenas empresas
+              de manutenção que ainda controlam tudo no caderno e na planilha — e que
+              perdem contrato quando o PMOC vence, a OS some no WhatsApp ou o orçamento
+              não sai a tempo.
             </p>
             <p>
-              Avaliaram o Auvo (caro, setup pago), o Field Control (UX dos anos 2000), e o
-              "vamos contratar um dev" (caos). Não tinha um produto que falasse com a
-              empresa pequena brasileira sem cobrar como SaaS gringo.
+              O mercado brasileiro tinha duas opções: SaaS gringo cobrando em dólar com
+              UX pensada pra outra realidade, ou ferramenta nacional travada em interface
+              dos anos 2000 com setup pago. Nenhuma falava com a empresa pequena
+              brasileira de verdade.
             </p>
             <p>
-              Em 6 meses, o protótipo da Klimar substituiu a planilha. Em 12 meses, a PHP
-              recuperou os contratos perdidos e ganhou três novos. Em 18 meses, virou
-              produto que outras empresas pediam pra usar. Está na sua frente agora.
+              A IAVerde decidiu construir essa terceira opção. Em vez de vender promessas,
+              começamos rodando o produto na operação real — corrigindo cada atrito que o
+              técnico encontrava no campo, no telhado, sob sol direto. O que está na sua
+              frente agora é o resultado dessa iteração.
             </p>
           </div>
         </div>

@@ -54,9 +54,9 @@ export const metadata: Metadata = {
     "manutenção predial",
     "Klimar",
   ],
-  authors: [{ name: "iaverde", url: SITE.url }],
-  creator: "iaverde",
-  publisher: "iaverde",
+  authors: [{ name: "IAVerde", url: SITE.url }],
+  creator: "IAVerde",
+  publisher: "IAVerde",
   applicationName: "Klimar",
   category: "business",
   alternates: { canonical: SITE.url },
@@ -107,17 +107,34 @@ export const metadata: Metadata = {
 const jsonLdOrganization = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "iaverde",
-  url: SITE.url,
+  name: "IAVerde",
+  url: SITE.parentUrl,
   logo: `${SITE.url}/icon.svg`,
-  sameAs: [],
-  contactPoint: {
-    "@type": "ContactPoint",
-    email: "contato@useklimar.com.br",
-    contactType: "customer support",
-    areaServed: "BR",
-    availableLanguage: ["Portuguese"],
+  description:
+    "Startup brasileira de base tecnológica que desenvolve software, IA aplicada e infraestrutura digital para resolver problemas concretos com impacto mensurável.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: SITE.parentLocation.city,
+    addressRegion: SITE.parentLocation.region,
+    addressCountry: SITE.parentLocation.country,
   },
+  sameAs: [SITE.parentUrl],
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      email: SITE.parentEmail,
+      contactType: "customer support",
+      areaServed: "BR",
+      availableLanguage: ["Portuguese"],
+    },
+    {
+      "@type": "ContactPoint",
+      email: SITE.email,
+      contactType: "sales",
+      areaServed: "BR",
+      availableLanguage: ["Portuguese"],
+    },
+  ],
 };
 
 const jsonLdSoftware = {
@@ -135,7 +152,7 @@ const jsonLdSoftware = {
   },
   provider: {
     "@type": "Organization",
-    name: "iaverde",
+    name: "IAVerde",
     url: SITE.url,
   },
 };

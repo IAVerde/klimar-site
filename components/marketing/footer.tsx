@@ -45,7 +45,15 @@ export function MarketingFooter() {
 
         <div className="border-t border-slate-800 pt-8 flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between gap-6">
           <p className="font-mono text-[11px] text-slate-600 tracking-wide">
-            © {new Date().getFullYear()} {SITE.legalName} · CNPJ XX.XXX.XXX/0001-XX
+            © {new Date().getFullYear()} {SITE.legalName} · Rio de Janeiro, BR ·{" "}
+            <a
+              href="https://iaverde.ia.br"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-slate-300 transition-colors"
+            >
+              iaverde.ia.br
+            </a>
           </p>
           <div className="flex items-center gap-3 text-slate-500">
             <SocialLink href="#" label="Instagram">
