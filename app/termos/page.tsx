@@ -40,10 +40,10 @@ export default function TermosPage() {
           <p className="text-slate-400 text-[15px]">
             Dúvidas no intervalo:{" "}
             <a
-              href="mailto:contato@useklimar.com.br"
+              href="mailto:contato@iaverde.ia.br"
               className="text-[#00B8D4] hover:underline"
             >
-              contato@useklimar.com.br
+              contato@iaverde.ia.br
             </a>
             .
           </p>

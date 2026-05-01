@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { ZodError } from "zod";
 
 import { getClientIp } from "@/lib/get-client-ip";
+import { getPostHogClient } from "@/lib/posthog-server";
 import { rateLimit } from "@/lib/rate-limit";
 import { RESEND_FROM, getResend } from "@/lib/resend";
 import { waitlistWelcomeHtml, waitlistInternalHtml } from "@/lib/email-templates";
@@ -95,6 +96,23 @@ export async function POST(req: NextRequest) {
       } catch (err) {
         console.warn("[waitlist] notification email failed:", err);
       }
+    }
+  }
+
+  if (!alreadyRegistered) {
+    const posthog = getPostHogClient();
+    if (posthog) {
+      posthog.capture({
+        distinctId: payload.email,
+        event: "waitlist_submitted",
+        properties: {
+          audience: payload.audience ?? "unknown",
+          source: payload.source ?? "landing",
+          utm_source: payload.utm_source,
+          utm_medium: payload.utm_medium,
+          utm_campaign: payload.utm_campaign,
+        },
+      });
     }
   }
 

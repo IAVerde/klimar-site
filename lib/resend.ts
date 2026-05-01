@@ -16,4 +16,4 @@ export function getResend(): Resend | null {
 }
 
 export const RESEND_FROM =
-  process.env.RESEND_FROM_EMAIL ?? "Klimar <onboarding@resend.dev>";
+  process.env.RESEND_FROM_EMAIL ?? "Klimar <noreply@iaverde.ia.br>";

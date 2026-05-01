@@ -5,6 +5,8 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import posthog from "posthog-js";
+
 import { trackEvent } from "@/components/analytics/posthog-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +40,7 @@ export function SignupForm({ audience }: SignupFormProps) {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error ?? "Erro ao criar conta.");
 
+      posthog.identify(values.email, { email: values.email, audience: audience ?? "unknown" });
       trackEvent(AnalyticsEvent.signupCompleted, { audience });
 
       if (data.requiresConfirmation) {

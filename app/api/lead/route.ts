@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 
 import { businessLeadInternalHtml } from "@/lib/email-templates";
 import { getClientIp } from "@/lib/get-client-ip";
+import { getPostHogClient } from "@/lib/posthog-server";
 import { rateLimit } from "@/lib/rate-limit";
 import { RESEND_FROM, getResend } from "@/lib/resend";
 import { businessLeadSchema } from "@/lib/schemas";
@@ -84,6 +85,22 @@ export async function POST(req: NextRequest) {
     } catch (err) {
       console.warn("[lead] notification email failed:", err);
     }
+  }
+
+  const posthog = getPostHogClient();
+  if (posthog) {
+    posthog.capture({
+      distinctId: payload.email,
+      event: "business_lead_submitted",
+      properties: {
+        company: payload.company,
+        num_technicians: payload.num_technicians ?? null,
+        source: payload.source ?? "landing",
+        utm_source: payload.utm_source,
+        utm_medium: payload.utm_medium,
+        utm_campaign: payload.utm_campaign,
+      },
+    });
   }
 
   return NextResponse.json({ success: true });

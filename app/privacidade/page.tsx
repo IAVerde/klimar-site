@@ -57,10 +57,10 @@ export default function PrivacidadePage() {
               Acesso, correção, exclusão e portabilidade dos seus dados a qualquer momento
               em{" "}
               <a
-                href="mailto:contato@useklimar.com.br"
+                href="mailto:contato@iaverde.ia.br"
                 className="text-[#00B8D4] hover:underline"
               >
-                contato@useklimar.com.br
+                contato@iaverde.ia.br
               </a>
               . Resposta em até 15 dias.
             </p>

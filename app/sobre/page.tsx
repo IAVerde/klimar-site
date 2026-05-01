@@ -39,7 +39,7 @@ export default function SobrePage() {
           }
           description="Comece grátis, ou converse com o time fundador."
           primary={{ href: "/precos", label: "Começar grátis" }}
-          secondary={{ href: "mailto:contato@useklimar.com.br", label: "Falar com fundador" }}
+          secondary={{ href: "mailto:contato@iaverde.ia.br", label: "Falar com fundador" }}
         />
       </main>
       <MarketingFooter />

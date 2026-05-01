@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { ZodError } from "zod";
 
 import { getClientIp } from "@/lib/get-client-ip";
+import { getPostHogClient } from "@/lib/posthog-server";
 import { rateLimit } from "@/lib/rate-limit";
 import { signupSchema } from "@/lib/schemas";
 import { SITE } from "@/lib/site";
@@ -53,6 +54,24 @@ export async function POST(req: NextRequest) {
       { error: humanizeAuthError(error.message) },
       { status: 400 },
     );
+  }
+
+  const distinctId = data.user?.id ?? payload.email;
+  const posthog = getPostHogClient();
+  if (posthog) {
+    posthog.identify({
+      distinctId,
+      properties: { email: payload.email, audience: payload.audience ?? "unknown" },
+    });
+    posthog.capture({
+      distinctId,
+      event: "signup_completed",
+      properties: {
+        audience: payload.audience ?? "unknown",
+        requires_confirmation: !data.session,
+        source: "landing",
+      },
+    });
   }
 
   return NextResponse.json({
