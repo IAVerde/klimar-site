@@ -1,6 +1,8 @@
 export const SITE = {
   name: "Klimar",
   legalName: "IAVerde",
+  legalFullName: "IAVerde Serviços Digitais LTDA",
+  cnpj: "65.525.908/0001-64",
   trademark: "Klimar™",
   domain: "useklimar.com.br",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://useklimar.com.br",
@@ -9,5 +11,14 @@ export const SITE = {
   parentEmail: "contato@iaverde.ia.br",
   parentUrl: "https://iaverde.ia.br",
   parentLocation: { city: "Rio de Janeiro", region: "RJ", country: "BR" },
+  parentAddress: {
+    street: "Rua Visconde de Pirajá, 414",
+    suite: "Sala 718",
+    neighborhood: "Ipanema",
+    city: "Rio de Janeiro",
+    region: "RJ",
+    postalCode: "22410-002",
+    country: "BR",
+  },
   description: "Gestão para serviços técnicos.",
 } as const;

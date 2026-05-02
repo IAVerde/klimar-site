@@ -1,5 +1,6 @@
 import { GradientOrbs } from "@/components/effects/gradient-orbs";
 import { GridPattern } from "@/components/effects/grid-pattern";
+import { TEAM } from "@/lib/team";
 
 export function AboutHero() {
   return (
@@ -78,14 +79,17 @@ export function WhoWeAreSection() {
                 />
                 <div>
                   <div className="font-display font-semibold text-[20px] tracking-tighter2">
-                    IAVerde
+                    IAVerde Serviços Digitais LTDA
                   </div>
                   <p className="text-slate-400 text-[14px] mt-1">
                     Startup brasileira de base tecnológica que desenvolve software, IA
                     aplicada e infraestrutura digital para resolver problemas concretos
-                    com impacto mensurável. Klimar é o primeiro produto.
+                    com impacto mensurável. Constituída em março de 2026, com sede em
+                    Ipanema, Rio de Janeiro. Klimar é o primeiro produto.
                   </p>
-                  <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mt-3 flex items-center gap-3">
+                  <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <span>cnpj 65.525.908/0001-64</span>
+                    <span className="text-slate-700">·</span>
                     <span>rio de janeiro, br</span>
                     <span className="text-slate-700">·</span>
                     <a
@@ -100,32 +104,50 @@ export function WhoWeAreSection() {
                 </div>
               </div>
             </div>
-            <div className="card-surface p-7">
-              <div className="flex items-start gap-5">
-                <div
-                  className="w-16 h-16 rounded-full flex-shrink-0"
-                  style={{ background: "linear-gradient(135deg,#4DD0E1,#1E293B)" }}
-                  aria-hidden="true"
-                />
-                <div>
-                  <div className="font-display font-semibold text-[20px] tracking-tighter2">
-                    [Fundador]{" "}
-                    <span className="text-slate-500 font-normal text-[15px] italic">
-                      — founder &amp; CEO
-                    </span>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {TEAM.map((member) => {
+                const isFounder = member.role === "founder";
+                return (
+                  <div
+                    key={member.name}
+                    className="card-surface p-6 relative"
+                    style={
+                      isFounder
+                        ? {
+                            borderColor: "rgba(0,184,212,0.4)",
+                            boxShadow: "0 0 0 1px rgba(0,184,212,0.15)",
+                          }
+                        : undefined
+                    }
+                  >
+                    {isFounder && (
+                      <span className="absolute top-3 right-3 font-mono text-[9px] tracking-[0.16em] uppercase font-semibold text-[#00B8D4]">
+                        fundador
+                      </span>
+                    )}
+                    <div className="flex items-start gap-4">
+                      <div
+                        className="w-14 h-14 rounded-full flex-shrink-0"
+                        style={{ background: member.avatarGradient }}
+                        aria-hidden="true"
+                      />
+                      <div className="min-w-0">
+                        <div className="font-display font-semibold text-[18px] tracking-tighter2 leading-tight">
+                          {member.name}
+                        </div>
+                        <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#00B8D4] mt-1">
+                          {member.roleLabel}
+                        </div>
+                        {member.bio && (
+                          <p className="text-slate-400 text-[13.5px] mt-2.5 leading-[1.6]">
+                            {member.bio}
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-slate-400 text-[14px] mt-1.5 leading-[1.65]">
-                    Engenheiro com 12 anos no setor de refrigeração. Construiu o Klimar
-                    resolvendo o problema da própria empresa de manutenção — começou em
-                    planilha, virou MVP, virou produto.
-                  </p>
-                  <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-slate-500 mt-3 flex items-center gap-3">
-                    <span>rio de janeiro, br</span>
-                    <span className="text-slate-700">·</span>
-                    <span>IAVerde</span>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>

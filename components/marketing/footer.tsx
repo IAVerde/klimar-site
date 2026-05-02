@@ -44,17 +44,24 @@ export function MarketingFooter() {
         </div>
 
         <div className="border-t border-slate-800 pt-8 flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between gap-6">
-          <p className="font-mono text-[11px] text-slate-600 tracking-wide">
-            © {new Date().getFullYear()} {SITE.legalName} · Rio de Janeiro, BR ·{" "}
-            <a
-              href="https://iaverde.ia.br"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-slate-300 transition-colors"
-            >
-              iaverde.ia.br
-            </a>
-          </p>
+          <div className="font-mono text-[11px] text-slate-600 tracking-wide leading-relaxed">
+            <p>
+              © {new Date().getFullYear()} {SITE.legalFullName} · CNPJ {SITE.cnpj}
+            </p>
+            <p className="mt-1">
+              {SITE.parentAddress.street}, {SITE.parentAddress.suite} ·{" "}
+              {SITE.parentAddress.neighborhood} · {SITE.parentAddress.city}/
+              {SITE.parentAddress.region} · CEP {SITE.parentAddress.postalCode} ·{" "}
+              <a
+                href="https://iaverde.ia.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-slate-300 transition-colors"
+              >
+                iaverde.ia.br
+              </a>
+            </p>
+          </div>
           <div className="flex items-center gap-3 text-slate-500">
             <SocialLink href="#" label="Instagram">
               <svg

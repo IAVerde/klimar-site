@@ -108,15 +108,20 @@ const jsonLdOrganization = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "IAVerde",
+  legalName: SITE.legalFullName,
+  taxID: SITE.cnpj,
+  foundingDate: "2026-03-06",
   url: SITE.parentUrl,
   logo: `${SITE.url}/icon.svg`,
   description:
     "Startup brasileira de base tecnológica que desenvolve software, IA aplicada e infraestrutura digital para resolver problemas concretos com impacto mensurável.",
   address: {
     "@type": "PostalAddress",
-    addressLocality: SITE.parentLocation.city,
-    addressRegion: SITE.parentLocation.region,
-    addressCountry: SITE.parentLocation.country,
+    streetAddress: `${SITE.parentAddress.street}, ${SITE.parentAddress.suite}`,
+    addressLocality: SITE.parentAddress.city,
+    addressRegion: SITE.parentAddress.region,
+    postalCode: SITE.parentAddress.postalCode,
+    addressCountry: SITE.parentAddress.country,
   },
   sameAs: [SITE.parentUrl],
   contactPoint: [
