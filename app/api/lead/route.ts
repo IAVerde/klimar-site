@@ -101,6 +101,11 @@ export async function POST(req: NextRequest) {
         utm_campaign: payload.utm_campaign,
       },
     });
+    try {
+      await posthog.flush();
+    } catch (err) {
+      console.warn("[lead] posthog flush failed:", err);
+    }
   }
 
   return NextResponse.json({ success: true });

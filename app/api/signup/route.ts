@@ -72,6 +72,11 @@ export async function POST(req: NextRequest) {
         source: "landing",
       },
     });
+    try {
+      await posthog.flush();
+    } catch (err) {
+      console.warn("[signup] posthog flush failed:", err);
+    }
   }
 
   return NextResponse.json({

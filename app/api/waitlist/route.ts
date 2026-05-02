@@ -113,6 +113,12 @@ export async function POST(req: NextRequest) {
           utm_campaign: payload.utm_campaign,
         },
       });
+      // serverless: garante que o batch sai antes da função encerrar
+      try {
+        await posthog.flush();
+      } catch (err) {
+        console.warn("[waitlist] posthog flush failed:", err);
+      }
     }
   }
 
